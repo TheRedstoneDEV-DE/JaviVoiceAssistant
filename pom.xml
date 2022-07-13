@@ -1,0 +1,179 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>me.theredstonedev</groupId>
+	<artifactId>me.theredstonedev.VoiceAssistant</artifactId>
+	<version>-ALPHA-0.1</version>
+	<name>VoiceAssistant</name>
+	<description>A voice Assistant based on java</description>
+	<properties>
+		<maven.compiler.source>16</maven.compiler.source>
+		<maven.compiler.target>16</maven.compiler.target>
+	</properties>
+	<repositories>
+		<repository>
+			<id>jcentral</id>
+			<name>jcenter</name>
+			<url>https://jcenter.bintray.com</url>
+		</repository>
+		<repository>
+			<id>spring</id>
+			<name>spring</name>
+			<url>https://repo.spring.io/plugins-release/</url>
+		</repository>
+		<repository>
+			<id>TU-Darmstadt</id>
+			<name>TU-Darmstadt</name>
+			<url>https://zoidberg.ukp.informatik.tu-darmstadt.de/artifactory/public-releases/</url>
+		</repository>
+	</repositories>
+	<dependencies>
+		<dependency>
+			<groupId>io.qtjambi</groupId>
+			<artifactId>qtjambi-native-linux-x64</artifactId>
+			<version>6.2.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/io.qtjambi/qtjambi -->
+		<dependency>
+			<groupId>io.qtjambi</groupId>
+			<artifactId>qtjambi</artifactId>
+			<version>6.2.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/de.dfki.mary/marytts-lang-en -->
+		<dependency>
+			<groupId>de.dfki.mary</groupId>
+			<artifactId>marytts-lang-en</artifactId>
+			<version>5.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.twmacinta</groupId>
+					<artifactId>fast-md5</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/de.dfki.mary/voice-cmu-rms-hsmm -->
+		<dependency>
+			<groupId>de.dfki.mary</groupId>
+			<artifactId>voice-cmu-rms-hsmm</artifactId>
+			<version>5.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.twmacinta</groupId>
+					<artifactId>fast-md5</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/gnu.io/rxtx -->
+		<dependency>
+			<groupId>org.rxtx</groupId>
+			<artifactId>rxtx</artifactId>
+			<version>2.1.7</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/de.dfki.mary/marytts -->
+		<dependency>
+			<groupId>de.dfki.mary</groupId>
+			<artifactId>marytts</artifactId>
+			<version>5.2</version>
+			<type>pom</type>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.wikimedia/mwdumper -->
+		<dependency>
+			<groupId>org.wikimedia</groupId>
+			<artifactId>mwdumper</artifactId>
+			<version>1.16-ukp-2</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/de.dfki.mary/marytts-builder -->
+		<dependency>
+			<groupId>de.dfki.mary</groupId>
+			<artifactId>marytts-builder</artifactId>
+			<version>5.2.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.twmacinta</groupId>
+					<artifactId>fast-md5</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>gov.noaa.pmel.sgt</groupId>
+					<artifactId>sgt</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.wikimedia</groupId>
+					<artifactId>mwdumper</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/de.dfki.mary/voice-cmu-slt-hsmm -->
+		<dependency>
+			<groupId>de.dfki.mary</groupId>
+			<artifactId>voice-cmu-slt-hsmm</artifactId>
+			<version>5.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/de.dfki.mary/voice-dfki-poppy-hsmm -->
+		<dependency>
+			<groupId>de.dfki.mary</groupId>
+			<artifactId>voice-dfki-poppy-hsmm</artifactId>
+			<version>5.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>club.minnced</groupId>
+			<artifactId>java-discord-rpc</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.twmacinta/fast-md5 -->
+		<dependency>
+			<groupId>com.twmacinta</groupId>
+			<artifactId>fast-md5</artifactId>
+			<version>2.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alphacephei</groupId>
+			<artifactId>vosk</artifactId>
+			<version>0.3.38</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20220320</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.2.4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>Main</mainClass>
+								</transformer>
+							</transformers>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
+				<configuration>
+					<source>16</source>
+					<target>16</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
