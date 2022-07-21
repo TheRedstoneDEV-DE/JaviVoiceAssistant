@@ -182,7 +182,7 @@ public class VoiceAssistant implements Runnable {
 	public void run() {
 
 		try {
-			model = new Model("vosk-model-small-en-us-0.15");
+			model = new Model("model");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
