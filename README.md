@@ -92,5 +92,9 @@ Requirements to run (only basic funtionality):
 
 4. Run the Jar like you would do it!
 
+*NOTE:* Before you run this voice assistant, please download a voice recognition model for Vosk! (the small model is recommended, because of latency)
+Vosk model download:
+[Model Download](https://alphacephei.com/vosk/models)
+
 `java -jar [JARFILE]`
 
