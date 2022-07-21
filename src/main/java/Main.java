@@ -19,6 +19,7 @@ public class Main {
 	public static Boolean OverlayEnabled = false;
 	public static Boolean RPCEnabled = false;
 	public static Boolean localRec = false;
+	public static Boolean nvGPUEnabled = false;
 	public static int sensibility = 0;
 
 	public static void main(String[] args) {
@@ -112,6 +113,9 @@ public class Main {
 		}
 		if (configuration.Manager.get("use-local-recognition").equalsIgnoreCase("yes")) {
 			localRec = true;
+		}
+		if (configuration.Manager.get("system-status-module-nvgpu-activated").equalsIgnoreCase("yes")) {
+			nvGPUEnabled = true;
 		}
 		sensibility = Integer.parseInt(configuration.Manager.get("rms-threshold"));
 
