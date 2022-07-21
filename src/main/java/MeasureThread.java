@@ -25,10 +25,9 @@ public class MeasureThread implements Runnable {
 					
 					if (flipFlop) {
 						flipFlop=false;
-						ProcessBuilder pb = new ProcessBuilder("/usr/bin/nvidia-smi", "--query-gpu=temperature.gpu", "--format=csv");
-						output = IOUtils.toString(pb.start().getInputStream(), StandardCharsets.UTF_8);
-						if (!RpcEnabled && Main.dcTh.isAlive()) {
-							//Main.dcTh.interrupt();
+						if (Main.nvGPUEnabled){
+							ProcessBuilder pb = new ProcessBuilder("/usr/bin/nvidia-smi", "--query-gpu=temperature.gpu", "--format=csv");
+							output = IOUtils.toString(pb.start().getInputStream(), StandardCharsets.UTF_8);
 						}
 						if (flipFlop2 && RpcEnabled) {
 							flipFlop2=false;
@@ -57,7 +56,11 @@ public class MeasureThread implements Runnable {
 						flipFlop=true;
 					}
 					
-					Main.oth.o.gpuTemp = Integer.parseInt(output.replaceAll("temperature.gpu","").replaceAll("\\n", ""));
+					if (Main.nvGPUEnabled){
+						Integer.parseInt(output.replaceAll("temperature.gpu","").replaceAll("\\n", ""));
+					}else{
+						Main.oth.o.gpuTemp = 0;
+					}
 					Main.oth.o.cpuTemp = readTemp();
 					Main.oth.o.cpuUsage = getCpuUsage();
 					Main.oth.o.MemUsed = Runtime.getRuntime().totalMemory()-Runtime.getRuntime().freeMemory();
@@ -115,11 +118,7 @@ public class MeasureThread implements Runnable {
 		String temp = "";
 		try {
 			File myObj;
-			if (useOther) {
-				myObj = new File("/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon2/temp1_input");
-			}else {
-				myObj = new File("/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon1/temp1_input");
-			}
+			myObj = new File(Main.CpuStatFile);
 			Scanner myReader = new Scanner(myObj);
 			temp = myReader.nextLine();
 			myReader.close();
