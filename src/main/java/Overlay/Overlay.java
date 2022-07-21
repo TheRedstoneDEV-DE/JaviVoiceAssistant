@@ -37,7 +37,7 @@ public class Overlay extends QWidget {
 				Qt.WindowType.X11BypassWindowManagerHint);
 		setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground);
 		setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground);
-		setGeometry(1600, 0, 1920, 1080);
+		setGeometry(0, 0, 620, 300);
 		setFixedHeight(300);
 		setFixedWidth(620);
 		showFullScreen();
