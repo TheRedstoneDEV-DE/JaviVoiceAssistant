@@ -96,5 +96,9 @@ Requirements to run (only basic funtionality):
 Vosk model download:
 [Model Download](https://alphacephei.com/vosk/models)
 
+Then unpack the ZIP file and rename the contained folder to "model" (without "" of course)
+
+After this just run the program and the recognition should work perfectly.
+
 `java -jar [JARFILE]`
 
