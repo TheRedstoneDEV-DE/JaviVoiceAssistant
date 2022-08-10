@@ -262,8 +262,6 @@ public class VoiceAssistant implements Runnable {
 			}
 			System.out.println(recognizer.getFinalResult());
 			microphone.close();
-
-			restart();
 		} catch (
 
 		Exception e) {
