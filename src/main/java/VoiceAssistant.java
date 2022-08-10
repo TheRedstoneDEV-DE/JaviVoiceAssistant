@@ -28,6 +28,7 @@ public class VoiceAssistant implements Runnable {
 	static Recognizer recognizer = null;
 	static Boolean inRange = false;
 	static int AudibleDelay = 0;
+	static boolean isRunning = true;
 	private static final DecimalFormat df = new DecimalFormat("0");
 
 //  initialize TTS system
@@ -171,6 +172,9 @@ public class VoiceAssistant implements Runnable {
 				} else {
 					tts.speak("this module disabled by the configuration file", 2.0f, true, true);
 				}
+			}else if (voiceCommand.startsWith("stop") && active) {
+				tts.speak("shutting down", 2.0f, true, true);
+				isRunning = false;
 			}
 			Main.oth.o.AIactive = active;
 		} catch (Exception ex) {
@@ -188,7 +192,7 @@ public class VoiceAssistant implements Runnable {
 			e.printStackTrace();
 		}
 		recognizer = new Recognizer(model, 120000,
-				"[\"rgb auto red green blue cyan purple yellow the hey computer pause resume next previous set volume to percent open steam hide show overlay what is the cpu usage start conversation ten twenty thirty forty fifty sixty seventy eighty ninety\", \"[unk]\"]");
+				"[\"stop rgb auto red green blue cyan purple yellow the hey computer pause resume next previous set volume to percent open steam hide show overlay what is the cpu usage start conversation ten twenty thirty forty fifty sixty seventy eighty ninety\", \"[unk]\"]");
 		startRec();
 	}
 
@@ -242,9 +246,8 @@ public class VoiceAssistant implements Runnable {
 			int bytesRead = 0;
 			byte[] b = new byte[4096];
 
-			while (bytesRead <= 100000000) {
+			while (isRunning) {
 				numBytesRead = microphone.read(b, 0, CHUNK_SIZE);
-				bytesRead += numBytesRead;
 				if (isAudible(b)) {
 					if (recognizer.acceptWaveForm(b, numBytesRead)) {
 						String res = recognizer.getResult();
@@ -256,7 +259,6 @@ public class VoiceAssistant implements Runnable {
 						}
 					}
 				}
-				Thread.sleep(1);
 			}
 			System.out.println(recognizer.getFinalResult());
 			microphone.close();
