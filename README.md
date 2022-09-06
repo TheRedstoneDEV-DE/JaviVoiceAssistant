@@ -20,17 +20,11 @@ A multifunction and fully offline usable voice assistant written in Java
 
 - Vosk (speech recognizer)
 
-- RXTX (communication with Arduino / ATMEGA 328P for RGB backlight)
-
 - QT / QT Jambi (just the simple Text-Overlay)
 
 - java-discord-rpc (Discord RPC)
 
-- 2 Natives:
-  
-  - small C++-Program for getting avarage screen color (just for Backlight)
-  
-  - MPRIS-Interface for controlling nearly any media on Desktop (standart setting only works for the KDE Plasma Browser Extension)
+- dbus java for communicating with MPRIS
 
 
 
@@ -60,7 +54,7 @@ Requirements to run (only basic funtionality):
 
 - Git
   
-  *meida control, volume control, automatic backlight and some other things WILL NOT WORK!*
+  *meida control, volume control and some other things WILL NOT WORK!*
 
 
 
