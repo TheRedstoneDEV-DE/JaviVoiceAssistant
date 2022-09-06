@@ -2,7 +2,7 @@
 
 A multifunction and fully offline usable voice assistant written in Java
 
-Liecence Infomation of used libraries can be found [here] (https://theredstonedev-de.github.io/VoiceAssistant/target/site/)
+Liecence Infomation of used libraries can be found here: https://theredstonedev-de.github.io/VoiceAssistant/target/site/
 
 **Please Note:**
 
