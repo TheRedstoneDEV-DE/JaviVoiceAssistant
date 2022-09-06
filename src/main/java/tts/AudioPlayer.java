@@ -1,41 +1,27 @@
 package tts;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
-import javax.sound.sampled.FloatControl;
-import javax.sound.sampled.LineListener;
-import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.spi.MixerProvider;
 
-import marytts.util.data.audio.MonoAudioInputStream;
-import marytts.util.data.audio.StereoAudioInputStream;
+public class AudioPlayer {
+	AudioInputStream ais = null;
 
-/**
- * A single Thread Audio Player Once used it has to be initialised again
- * 
- * @author GOXR3PLUS
- *
- */
-public class AudioPlayer extends Thread {
+	public AudioPlayer(AudioInputStream audio) {
+		ais = audio;
+	}
 
-	public static void setAudio(AudioInputStream audio) {
+	public void play() {
 		try {
-			AudioFormat format = audio.getFormat();
-			DataLine.Info lineInfo = new DataLine.Info(Clip.class, format);
-
+			AudioFormat format = ais.getFormat();
+			DataLine.Info lineInfo = new DataLine.Info(SourceDataLine.class, format);
 			Mixer.Info selectedMixer = null;
-
 			for (Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
 				Mixer mixer = AudioSystem.getMixer(mixerInfo);
 				if (mixer.isLineSupported(lineInfo)) {
@@ -43,13 +29,29 @@ public class AudioPlayer extends Thread {
 					break;
 				}
 			}
-
 			if (selectedMixer != null) {
-				Clip clip = AudioSystem.getClip(selectedMixer);
-				clip.open(audio);
-				clip.start();
-				do { Thread.sleep(100); } while (clip.isRunning());
-				clip.close();
+				Mixer m = AudioSystem.getMixer(selectedMixer);
+				SourceDataLine sdl = (SourceDataLine) m.getLine(lineInfo);
+				sdl.open(format);
+				sdl.start();
+				int nRead = 0;
+				byte[] abData = new byte[12000];
+				while ((nRead != -1)) {
+					try {
+						nRead = ais.read(abData, 0, abData.length);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+					if (nRead >= 0) {
+						if (sdl.available() >= 12000) {
+							sdl.write(abData, 0, nRead);
+							Thread.sleep(374);
+						}
+					}
+				}
+				sdl.drain();
+				sdl.close();
+				ais.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

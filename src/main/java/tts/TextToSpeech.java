@@ -8,7 +8,14 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.Mixer;
+import javax.sound.sampled.SourceDataLine;
 
 import marytts.LocalMaryInterface;
 import marytts.MaryInterface;
@@ -17,113 +24,101 @@ import marytts.exceptions.SynthesisException;
 import marytts.modules.synthesis.Voice;
 import marytts.signalproc.effects.AudioEffect;
 import marytts.signalproc.effects.AudioEffects;
+import marytts.util.data.audio.MaryAudioUtils;
 
 /**
  * @author GOXR3PLUS
  *
  */
 public class TextToSpeech {
-	
+
 	private AudioPlayer tts;
 	private MaryInterface marytts;
-	
-	/**
-	 * Constructor
-	 */
+
 	public TextToSpeech() {
 		try {
 			marytts = new LocalMaryInterface();
-			
+
 		} catch (MaryConfigurationException ex) {
 			Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-	
-	//----------------------GENERAL METHODS---------------------------------------------------//
-	
-	/**
-	 * Transform text to speech
-	 * 
-	 * @param text
-	 *            The text that will be transformed to speech
-	 * @param daemon
-	 *            <br>
-	 *            <b>True</b> The thread that will start the text to speech Player will be a daemon Thread <br>
-	 *            <b>False</b> The thread that will start the text to speech Player will be a normal non daemon Thread
-	 * @param join
-	 *            <br>
-	 *            <b>True</b> The current Thread calling this method will wait(blocked) until the Thread which is playing the Speech finish <br>
-	 *            <b>False</b> The current Thread calling this method will continue freely after calling this method
-	 */
-	public void speak(String text , float gainValue , boolean daemon , boolean join) {
-		
-		// Stop the previous player
-		stopSpeaking();
-		
+
+	public void speak(String text) {
+
 		try (AudioInputStream audio = marytts.generateAudio(text)) {
-			
-			// Player is a thread(threads can only run one time) so it can be
-			// used has to be initiated every time
-			tts = new AudioPlayer();
-			tts.setAudio(audio);
-			tts.setDaemon(daemon);
-			tts.start();
-			if (join)
-				tts.join();
-			
-		} catch (SynthesisException ex) {
+			AudioPlayer ap = new AudioPlayer(audio);
+			ap.play();
+
+		} catch (Exception ex) {
 			Logger.getLogger(getClass().getName()).log(Level.WARNING, "Error saying phrase.", ex);
-		} catch (IOException ex) {
-			Logger.getLogger(getClass().getName()).log(Level.WARNING, "IO Exception", ex);
-		} catch (InterruptedException ex) {
-			Logger.getLogger(getClass().getName()).log(Level.WARNING, "Interrupted ", ex);
-			tts.interrupt();
 		}
 	}
-	
-	/**
-	 * Stop the MaryTTS from Speaking
-	 */
-	public void stopSpeaking() {
-		// Stop the previous player
+
+	public void setAudio(AudioInputStream audio) {
+		try {
+			AudioFormat format = audio.getFormat();
+			DataLine.Info lineInfo = new DataLine.Info(SourceDataLine.class, format);
+
+			Mixer.Info selectedMixer = null;
+
+			for (Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
+				Mixer mixer = AudioSystem.getMixer(mixerInfo);
+				if (mixer.isLineSupported(lineInfo)) {
+					selectedMixer = mixerInfo;
+					break;
+				}
+			}
+
+			if (selectedMixer != null) {
+				Mixer m = AudioSystem.getMixer(selectedMixer);
+				SourceDataLine sdl = (SourceDataLine) m.getLine(lineInfo);
+				sdl.open(format);
+				sdl.start();
+				int nRead = 0;
+				byte[] abData = new byte[512];
+				sdl.drain();
+				while ((nRead != -1)) {
+					try {
+						nRead = audio.read(abData, 0, abData.length);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+					}
+					if (nRead >= 0) {
+						System.out.println(sdl.available());
+						System.out.println("start");
+						if (sdl.available() >= 512) {
+							sdl.write(abData, 0, nRead);
+						} else {
+							sdl.drain();
+							sdl.write(abData, 0, nRead);
+						}
+						System.out.println("end");
+					}
+				}
+				sdl.drain();
+				sdl.close();
+				audio.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
-	//----------------------GETTERS---------------------------------------------------//
-	
-	/**
-	 * Available voices in String representation
-	 * 
-	 * @return The available voices for MaryTTS
-	 */
+
 	public Collection<Voice> getAvailableVoices() {
 		return Voice.getAvailableVoices();
 	}
-	
-	/**
-	 * @return the marytts
-	 */
+
 	public MaryInterface getMarytts() {
 		return marytts;
 	}
-	
-	/**
-	 * Return a list of available audio effects for MaryTTS
-	 * 
-	 * @return
-	 */
+
 	public List<AudioEffect> getAudioEffects() {
 		return StreamSupport.stream(AudioEffects.getEffects().spliterator(), false).collect(Collectors.toList());
 	}
-	
-	//----------------------SETTERS---------------------------------------------------//
-	
-	/**
-	 * Change the default voice of the MaryTTS
-	 * 
-	 * @param voice
-	 */
+
 	public void setVoice(String voice) {
 		marytts.setVoice(voice);
 	}
-	
+
 }

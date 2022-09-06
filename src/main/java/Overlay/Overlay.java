@@ -14,8 +14,8 @@ import io.qt.gui.QPainter;
 import io.qt.widgets.QWidget;
 
 public class Overlay extends QWidget {
-	public static boolean hidden = false;
-	public static boolean AIactive = false;
+	public boolean hidden = false;
+	public boolean AIactive = false;
 	public static float MemUsed = 0;
 	public static float MemTot = 0;
 	public static String lastCmd = "none";
@@ -37,7 +37,7 @@ public class Overlay extends QWidget {
 				Qt.WindowType.X11BypassWindowManagerHint);
 		setAttribute(Qt.WidgetAttribute.WA_NoSystemBackground);
 		setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground);
-		setGeometry(0, 0, 620, 300);
+		setGeometry(0, 1600, 620, 300);
 		setFixedHeight(300);
 		setFixedWidth(620);
 		showFullScreen();

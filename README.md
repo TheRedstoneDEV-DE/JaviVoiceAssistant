@@ -89,15 +89,7 @@ Requirements to run (only basic funtionality):
 | discord-rpc-module-activated              | enables / disables the discord rpc [yes\|no]                                                                                                             |
 | use-local-recognition                     | enables / disables the remote client (if disabled voice processing is done locally)                                                                      |
 | rms-threshold                             | sets the basic noise threshold (so the processing is only running, if somthing is said **recommended to use with a denoiser like Cadmus or NoiseTorch**) |
+
 4. Run the Jar like you would do it!
 
-*NOTE:* Before you run this voice assistant, please download a voice recognition model for Vosk! (the small model is recommended, because of latency)
-Vosk model download:
-[Model Download](https://alphacephei.com/vosk/models)
-
-Then unpack the ZIP file and rename the contained folder to "model" (without "" of course) (The folder has to be in the same directory as the JAR file)
-
-After this just run the program and the recognition should work perfectly.
-
 `java -jar [JARFILE]`
-

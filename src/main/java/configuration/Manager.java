@@ -10,15 +10,15 @@ import java.net.URL;
 import java.util.Properties;
 
 public class Manager {
-	 static Properties prop =  new Properties();
-	 public static String get(String Pname) {
+	 Properties prop =  new Properties();
+	 public String get(String Pname) {
 		 load();
 		 return prop.getProperty(Pname);
 	 }
 	 InputStream getInternalConfig() {
 		 return getClass().getResourceAsStream("VoiceAssistant.properties");
 	 }
-	 static void load() {
+	 void load() {
 		 try {
 		 InputStream in = new Manager().getInternalConfig();
 		 prop.load(in);
