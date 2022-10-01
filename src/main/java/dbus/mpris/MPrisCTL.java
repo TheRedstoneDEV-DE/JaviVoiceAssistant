@@ -29,6 +29,6 @@ public class MPrisCTL {
 		pbe.Next();
 	}
 	public void prev() {
-		pbe.Previos();
+		pbe.Previous();
 	}
 }

@@ -45,7 +45,7 @@ public class AudioPlayer {
 					if (nRead >= 0) {
 						if (sdl.available() >= 12000) {
 							sdl.write(abData, 0, nRead);
-							Thread.sleep(374);
+							Thread.sleep(366);
 						}
 					}
 				}

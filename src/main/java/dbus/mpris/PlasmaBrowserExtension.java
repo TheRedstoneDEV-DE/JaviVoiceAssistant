@@ -13,5 +13,5 @@ public interface PlasmaBrowserExtension extends DBusInterface {
     void Play();
     void Pause();
     void Next();
-    void Previos();
+    void Previous();
 }

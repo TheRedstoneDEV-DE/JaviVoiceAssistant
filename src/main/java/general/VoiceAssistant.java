@@ -37,6 +37,7 @@ public class VoiceAssistant implements Runnable {
 	Recognizer recognizer = null;
 	Boolean inRange = false;
 	int AudibleDelay = 0;
+	int sensibility = 20;
 	public boolean isRunning = true;
 	public TextToSpeech tts = new TextToSpeech();
 	Boolean active = false;
@@ -45,13 +46,14 @@ public class VoiceAssistant implements Runnable {
 		{
 			put("resume", voicecommands.VoiceCommandPlayback.class);
 			put("pause", voicecommands.VoiceCommandPlayback.class);
-			put("previous",voicecommands.VoiceCommandPlayback.class);
-			put("next",voicecommands.VoiceCommandPlayback.class);
+			put("previous", voicecommands.VoiceCommandPlayback.class);
+			put("next", voicecommands.VoiceCommandPlayback.class);
 
 			put("show overlay", voicecommands.VoiceCommandsOverlay.class);
 			put("hide overlay", voicecommands.VoiceCommandsOverlay.class);
 			put("set volume to", voicecommands.VoiceCommandVolume.class);
 			put("open", voicecommands.VoiceCommandOpen.class);
+			put("reconfigure", voicecommands.VoiceCommandReconf.class);
 		}
 	};
 	private final DecimalFormat df = new DecimalFormat("0");
@@ -62,7 +64,7 @@ public class VoiceAssistant implements Runnable {
 		tts.setVoice("cmu-rms-hsmm");
 	}
 
-   //	just process the voice commands
+	// just process the voice commands
 	public void processCommand(String voiceCommand) {
 		try {
 			final JSONObject obj = new JSONObject(voiceCommand);
@@ -73,32 +75,33 @@ public class VoiceAssistant implements Runnable {
 			} else if (active) {
 				try {
 					Boolean commandKnown = false;
-					for(Map.Entry<String, Class> command : commands.entrySet()) {
-						if (voiceCommand.startsWith(command.getKey())){
-							Class<? extends CmdMask> cmd =  command.getValue();
-							Constructor<? extends CmdMask> constructor =  cmd.getConstructor();
+					for (Map.Entry<String, Class> command : commands.entrySet()) {
+						if (voiceCommand.startsWith(command.getKey())) {
+							Class<? extends CmdMask> cmd = command.getValue();
+							Constructor<? extends CmdMask> constructor = cmd.getConstructor();
 							CmdMask result = constructor.newInstance();
 							result.execute(voiceCommand, tts, m);
 							commandKnown = true;
+							m.oth.o.setWord(voiceCommand);
 							break;
 						}
 					}
 					if (!commandKnown) {
 						for (JPlugin plugin : Manager.plugins) {
 							try {
-								if(plugin.onUnknownVoiceCommand(voiceCommand, tts, m)) {
+								if (plugin.onUnknownVoiceCommand(voiceCommand, tts, m)) {
 									break;
 								}
-							}catch(Exception e) {
+							} catch (Exception e) {
 								System.out.println("Error on running a VoiceCommand of a Plugin:");
 								e.printStackTrace();
 							}
 						}
 					}
-				}catch(Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				active=false;
+				active = false;
 			}
 			Main.getMain().oth.o.AIactive = active;
 		} catch (Exception ex) {
@@ -115,8 +118,7 @@ public class VoiceAssistant implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		recognizer = new Recognizer(model, 120000,
-				"[\""+Main.getMain().vocab+"\", \"[UNDEFINED]\"]");
+		recognizer = new Recognizer(model, 120000, "[\"" + Main.getMain().vocab + "\", \"[unk]\"]");
 		startRec();
 	}
 
@@ -127,12 +129,12 @@ public class VoiceAssistant implements Runnable {
 
 	public boolean isAudible(byte[] data) {
 		if (!inRange) {
-			inRange = (getRootMeanSquared(data) > Main.getMain().sensibility);
+			inRange = (getRootMeanSquared(data) > sensibility);
 		}
 		if (AudibleDelay == 0) {
-			inRange = (getRootMeanSquared(data) > Main.getMain().sensibility);
+			inRange = (getRootMeanSquared(data) > sensibility);
 		}
-		if (AudibleDelay > 1000) {
+		if (AudibleDelay > 1200) {
 			AudibleDelay = 0;
 		} else {
 			AudibleDelay++;
@@ -170,10 +172,11 @@ public class VoiceAssistant implements Runnable {
 			int CHUNK_SIZE = 1024;
 			int bytesRead = 0;
 			byte[] b = new byte[4096];
-
+			Boolean isAudible = false;
+			int counter = 0;
 			while (isRunning) {
 				numBytesRead = microphone.read(b, 0, CHUNK_SIZE);
-				if (isAudible(b)) {
+				if (isAudible(b))  {
 					if (recognizer.acceptWaveForm(b, numBytesRead)) {
 						String res = recognizer.getResult();
 						if (res != null && res != "{\n" + "  \"text\" : \"\"\n" + "}"
@@ -185,8 +188,8 @@ public class VoiceAssistant implements Runnable {
 					}
 				}
 			}
-			System.out.println(recognizer.getFinalResult());
 			microphone.close();
+			System.out.println("VA_RECOG_THR >> Exited!");
 		} catch (
 
 		Exception e) {

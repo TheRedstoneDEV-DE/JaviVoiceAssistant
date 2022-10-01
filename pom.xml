@@ -62,13 +62,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/gnu.io/rxtx -->
-		<dependency>
-			<groupId>org.rxtx</groupId>
-			<artifactId>rxtx</artifactId>
-			<version>2.1.7</version>
-		</dependency>
-
 		<!-- https://mvnrepository.com/artifact/de.dfki.mary/marytts -->
 		<dependency>
 			<groupId>de.dfki.mary</groupId>

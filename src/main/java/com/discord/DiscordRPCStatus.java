@@ -6,7 +6,7 @@ import club.minnced.discord.rpc.DiscordRichPresence;
 
 public class DiscordRPCStatus implements Runnable{
 	public static DiscordRPC lib = DiscordRPC.INSTANCE;
-	public static DiscordRichPresence presence = new DiscordRichPresence();
+	public DiscordRichPresence presence = new DiscordRichPresence();
 	public static Boolean stop = false;
 	public void run() {
         String applicationId = "960163266619908196";
