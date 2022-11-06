@@ -10,8 +10,6 @@ Liecence Infomation of used libraries can be found here: https://theredstonedev-
 
 - **The traffic beween client and local server is not encrypted!** If you use only the built-in recognizer (without setting up a local server) there should everything be nothing insecure
 
-- The Program was just developed for my PC and might not work everywhere
-
 **Please inform me about bugs you have found via the issues!**
 
 #### Used libraries in this Project:
@@ -36,15 +34,13 @@ Requirements to run fully:
 
 - a PC based on x86_64 (amd64) with a Linux installation
 
-- Java (version 16 recommended)
+- Java (version 18 recommended)
 
 - QT 6
 
 - Maven (mvn on command line)
 
-- OpenCV (only for backlight)
-
-- Git
+- Git (optional, only for downloading)
 
 Requirements to run (only basic funtionality):
 
@@ -52,9 +48,9 @@ Requirements to run (only basic funtionality):
 
 - Java
 
-- Git
+- Git (optional, only for downloading)
   
-  *meida control, volume control and some other things WILL NOT WORK!*
+  *meida control, volume control and some other features WILL NOT WORK on Windows!*
 
 
 
@@ -66,24 +62,26 @@ Requirements to run (only basic funtionality):
 
 `mvn install`
 
-3. Open the target JAR in an archive program and edit configuration/VoiceAssistant.properties for your needs.
-
-**Explanation:**
-
-| parameter                                 | explanation                                                                                                                                              |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| mpris-module-activated                    | enables / disables the MPRIS module [yes\|no]                                                                                                            |
-| mpris-module-lib-path                     | full path to the MPRIS native (libMPRIS.so)                                                                                                              |
-| rgb-control-module-activated              | enables / disables the rgb module [yes\|no]                                                                                                              |
-| rgb-control-module-lib-path               | full path to the avgScreenColor native (libavgColorOfScreenLib.so)                                                                                       |
-| rgb-control-module-serialport             | serial port for communication with Arduino / ATMEGA 328P                                                                                                 |
-| system-status-module-activated            | sets if the system profiling unit should be active  [yes\|no]                                                                                            |
-| system-status-module-cpu-temperature-file | path to the file, which is used to read cpu temperature (on Linux of course)                                                                             |
-| overlay-module-activated                  | enables / disables the overlay module [yes\|no]                                                                                                          |
-| discord-rpc-module-activated              | enables / disables the discord rpc [yes\|no]                                                                                                             |
-| use-local-recognition                     | enables / disables the remote client (if disabled voice processing is done locally)                                                                      |
-| rms-threshold                             | sets the basic noise threshold (so the processing is only running, if somthing is said **recommended to use with a denoiser like Cadmus or NoiseTorch**) |
-
-4. Run the Jar like you would do it!
+3. Run the Jar file, which was generated in the 'target' folder
 
 `java -jar [JARFILE]`
+
+4. Cofigure via setup window
+
+The fields in the window should be selfexplaining.
+- 'Overlay position' definines the coordinates for the overlay (should only be necessary, if you have multiple screens)
+- 'CPU temp file' defines the file, in which the cpu temperature is logged by the kernel (if you don't have the overlay enabled, this is not used at all)
+- any MPRIS settings are just defining, which player you are targeting in the dbus interface (you can start, pause and skip titles with voicecommands)
+
+### List of commands
+
+---
+
+| command                                      | short explanation                                                     |
+| -------------------------------------------- | --------------------------------------------------------------------- |
+| hey computer                                 | just the base command, has to be said, before any other voice command |
+| set volume to [number between 10-90] percent | sets the volume of the main audio output via amixer                   |
+| open [application name]                      | opens the named application in another "screen"                       |
+| reconfigure                                  | opens the setup ui again (in case you missconfigured something)       |
+| [hide/show] overlay                          | hides or shows the overlay                                            |
+| pause/resume/next/previous                   | plays/pauses a mediaplayer, skippes one title forward/backward        |
