@@ -135,7 +135,7 @@
 		<dependency>
 			<groupId>com.github.hypfvieh</groupId>
 			<artifactId>dbus-java-core</artifactId>
-			<version>4.1.0</version>
+			<version>4.2.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.hypfvieh/dbus-java-transport-native-unixsocket -->
 		<dependency>
