@@ -58,13 +58,13 @@ Requirements to run (only basic funtionality):
 
    and get the voice model for vosk from (the small one is recommended)
    [VOSK Models](https://alphacephei.com/vosk/models)
-   unzip it, rename the folder inside it to 'models' and put it into the project root
+   unzip it, rename the folder inside it to 'model' and put it into the project root
 
 2. Build
 
    `mvn install`
 
-3. Run the Jar file, which was generated in the 'target' folder
+3. Run the Jar file, which was generated in the 'target' folder after copieng it into the project root
 
    `java -jar [JARFILE]`
 
@@ -87,7 +87,7 @@ The fields in the window should be selfexplaining.
       and get the voice model for vosk from (the small one is recommended)
 
       [VOSK Models](https://alphacephei.com/vosk/models)
-      unzip it, rename the folder inside it to 'models' and put it into the project root on          the server.
+      unzip it, rename the folder inside it to 'model' and put it into the project root on          the server.
 
 2. Build
 
@@ -97,7 +97,7 @@ The fields in the window should be selfexplaining.
 
        `java -jar [JARFILE]`
 
-4. Copy the built jar from the target folder, the 'models' folder and the 'keys' folder to the server device (here it really could be Windows and should'n affect anything)
+4. Copy the built jar from the target folder, the 'model' folder and the 'keys' folder to the server device (here it really could be Windows and should'n affect anything)
 
 5. Generate the Keystore and Truststore for Client and Server on the Server.
    To do that, go into the 'keys' folder and execute the bash file. Next you will be asked some questions, because of the certificate and a password for the key (you should remember it, because you need it when running)
