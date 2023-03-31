@@ -5,5 +5,5 @@ import tts.TextToSpeech;
 
 public interface Plugin {
 	public void onLoad();
-	public Boolean onUnknownVoiceCommand(String command, TextToSpeech tts, Main main);
+	public Boolean onVoiceCommand(String command, TextToSpeech tts, Main main);
 }

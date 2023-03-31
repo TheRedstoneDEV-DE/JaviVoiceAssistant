@@ -1,14 +1,16 @@
 package general;
 
 import java.io.File;
+import java.util.Properties;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import Overlay.OverlayThread;
-import RemoteVoskProtocolClient.ClientMain;
 import dbus.mpris.MPrisCTL;
 import plugins.Manager;
+
+import remoteProcessingClient.Client;
 
 public class Main {
 	private static Main main = new Main();
@@ -19,16 +21,32 @@ public class Main {
 	public Thread dcTh;
 	public MPrisCTL mpc;
 	public Boolean QtInitialized = false;
+	private Boolean init = false;
 	public com.discord.DiscordRPCStatus dcRPC;
-	public ClientMain clim = new ClientMain();
 	VoiceAssistant va;
-	public String vocab = "reconfigure stop kate dolphin the hey computer pause resume next previous set volume to percent open steam hide show overlay what is the cpu usage start conversation ten twenty thirty forty fifty sixty seventy eighty ninety";
+	public configuration.Manager man = new configuration.Manager();
+	public String vocab = "programs reconfigure stop the hey computer pause resume next previous set volume to percent open hide show overlay what is the cpu usage start conversation ten twenty thirty forty fifty sixty seventy eighty ninety ";
 	public int sensibility = 20;
-	configuration.Manager man = new configuration.Manager();
 
 	public static void main(String[] args) {
+		Properties props = System.getProperties();
 		try {
 			if (new File("config").exists() && new File("plugins").exists()) {
+				main.vocab = main.vocab + main.man.get("progNames").replaceAll(";", " ");
+				if (args.length > 0) {
+					if (args[0].equalsIgnoreCase("--server")) {
+						props.setProperty("javax.net.ssl.keyStore", "keys/server-key.jks");
+						props.setProperty("javax.net.ssl.keyStorePassword", System.getenv("KEY_PASSPHRASE"));
+						Thread t = new Thread() {
+							public void run() {
+								new remoteProcessingServer.ServerTTS().start();
+							}
+						};
+						t.start();
+						new remoteProcessingServer.ServerSTT().start();
+						System.exit(0);
+					}
+				}
 				Logger.getRootLogger().setLevel(Level.OFF);
 				System.out.println("initializing modules...");
 				System.out.println("Overlay...");
@@ -37,7 +55,7 @@ public class Main {
 					main.oth = new OverlayThread();
 					main.othth = new Thread(main.oth);
 					main.othth.start();
-					main.QtInitialized=true;
+					main.QtInitialized = true;
 					System.out.println("Done!");
 				} else {
 					System.out.println("--disabled!--");
@@ -52,16 +70,18 @@ public class Main {
 					System.out.println("--disabled!--");
 				}
 				System.out.println("MPrisCTL...");
-				if (main.man.get("mpris-module-activated").equalsIgnoreCase("yes"))
+				if (main.man.get("mpris-module-activated").equalsIgnoreCase("yes")) {
 					main.mpc = new MPrisCTL();
-				Thread mpt = new Thread() {
-					public void run() {
-						main.mpc.init();
-					}
-				};
-				mpt.start();
-				System.out.println("Done!");
-
+					Thread mpt = new Thread() {
+						public void run() {
+							main.mpc.init();
+						}
+					};
+					mpt.start();
+					System.out.println("Done!");
+				}else{
+					System.out.println("--disabled!--");
+				}
 				System.out.println();
 				System.out.println("-------------------------------------------------------------");
 				System.out.println("                  STARTING TO LOAD PLUGINS                   ");
@@ -75,27 +95,34 @@ public class Main {
 				System.out.println("                  FINISHED LOADING PULGINS                   ");
 				System.out.println("-------------------------------------------------------------");
 				System.out.println();
-				
-				
-				if (!main.man.get("use-local-recognition").equalsIgnoreCase("yes")) {
-					Thread VClithr = new Thread() {
-						public void run() {
-							main.clim.start();
-						}
-					};
-					VClithr.start();
+
+				main.init = true;
+				if (args.length > 0) {
+					if (args[0].equalsIgnoreCase("--client") && args.length == 2) {
+						props.setProperty("javax.net.ssl.trustStore", "keys/client-trust.jks");
+						props.setProperty("javax.net.ssl.trustStorePassword", System.getenv("KEY_PASSPHRASE"));
+						System.out.println("Test passed");
+						Client conncli = new Client();
+						main.va = new VoiceAssistant(true, conncli);
+						Thread clientTH = new Thread() {
+							public void run() {
+								conncli.connect(args[1], main.vocab, main.va);
+							}
+						};
+						clientTH.start();
+					}
 				} else {
-					main.va = new VoiceAssistant();
-					Thread tva = new Thread(main.va);
-					main.va.sensibility = Integer.parseInt(main.man.get("rms-threshold"));
-					tva.start();
+					main.va = new VoiceAssistant(false, null);
 				}
+				Thread tva = new Thread(main.va);
+				main.va.sensibility = Integer.parseInt(main.man.get("rms-threshold"));
+				tva.start();
 				while (!main.RST) {
 					Thread.sleep(10000);
 				}
-				main.RST=false;
+				main.RST = false;
 				main(null);
-			}else {
+			} else {
 				new firstTimeSetup.Setup().begin();
 			}
 		} catch (Exception w) {
@@ -110,9 +137,15 @@ public class Main {
 	public void shutdown() {
 		va.isRunning = false;
 	}
+
 	public void restart() {
-		RST=true;
-		restarted=true;
-		va.isRunning = false;
+		if (!init) {
+			System.out.println("Configurations done! Please start the program again now!");
+			System.exit(0);
+		} else {
+			RST = true;
+			restarted = true;
+			va.isRunning = false;
+		}
 	}
 }

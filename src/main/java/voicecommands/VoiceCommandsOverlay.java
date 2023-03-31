@@ -3,7 +3,6 @@ package voicecommands;
 import configuration.Manager;
 import general.CmdMask;
 import general.Main;
-import general.VoiceAssistant;
 import tts.TextToSpeech;
 
 public class VoiceCommandsOverlay extends CmdMask{

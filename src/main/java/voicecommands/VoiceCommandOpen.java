@@ -8,24 +8,26 @@ import tts.TextToSpeech;
 
 public class VoiceCommandOpen extends CmdMask{
 	public void execute(String command, TextToSpeech tts, Main main) {
-		String[] apps = {
-			"kate",
-			"dolphin",
-			"steam" //and so on
-		};
-		String selApp = "";
-		for (String app : apps) {
-			if(command.contains(app)) {
-					selApp = app;
-					break;
+		String[] prognames=main.man.get("progNames").split(";");
+		String[] progcommands=main.man.get("progCommands").split(";");
+		int sel = 404;
+		for (int i = 0; i<prognames.length; i++){
+			if(command.contains(prognames[i])) {
+				sel=i;
+				break;
 			}
 		}
-		tts.speak("opened "+selApp);
-		try {
-			Runtime.getRuntime().exec("screen -dmS "+selApp+"_screen "+selApp);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if(sel == 404){
+			tts.speak("requested program not found!");
+		}else{
+			tts.speak("opened "+prognames[sel]);
+			try {
+				String[] commandargs = progcommands[sel].split(" ");
+				Process process = Runtime.getRuntime().exec(commandargs);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 }

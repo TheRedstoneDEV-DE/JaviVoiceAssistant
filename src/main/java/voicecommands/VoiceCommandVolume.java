@@ -3,7 +3,6 @@ import java.io.IOException;
 
 import general.CmdMask;
 import general.Main;
-import general.VoiceAssistant;
 import tts.TextToSpeech;
 
 public class VoiceCommandVolume extends CmdMask{
@@ -11,7 +10,7 @@ public class VoiceCommandVolume extends CmdMask{
 		try {
 			String exec = "amixer -D pulse sset Master " + toNumber(
 					command.replaceAll("set volume to", "").replaceAll("percent", "").replaceAll(" ", "")) + "%";
-			Runtime.getRuntime().exec(exec);
+			Runtime.getRuntime().exec(exec.split(" "));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

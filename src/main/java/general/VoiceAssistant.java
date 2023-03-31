@@ -1,19 +1,14 @@
 package general;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.net.ServerSocket;
-import java.net.Socket;
-import java.text.DecimalFormat;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.DataLine;
-import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
 
 import org.json.*;
@@ -23,15 +18,17 @@ import org.vosk.Model;
 import org.vosk.Recognizer;
 
 import marytts.modules.synthesis.Voice;
-import marytts.tools.voiceimport.HMMVoiceMakeVoice;
+import marytts.server.http.InfoRequestHandler;
 import plugins.JPlugin;
 import plugins.Manager;
+import remoteProcessingClient.Client;
 import tts.TextToSpeech;
-import voicecommands.VoiceCommandPlayback;
 
 import javax.sound.sampled.AudioSystem;
 
 public class VoiceAssistant implements Runnable {
+	Boolean remote;
+	Client client;
 	ServerSocket Ssocket = null;
 	Model model;
 	Recognizer recognizer = null;
@@ -39,9 +36,19 @@ public class VoiceAssistant implements Runnable {
 	int AudibleDelay = 0;
 	int sensibility = 20;
 	public boolean isRunning = true;
-	public TextToSpeech tts = new TextToSpeech();
+	public TextToSpeech tts;
 	Boolean active = false;
 	Main m = Main.getMain();
+
+	public VoiceAssistant(boolean isRemote, Client connection) {
+		remote = isRemote;
+		client = connection;
+		tts = new TextToSpeech(isRemote, connection);
+	}
+
+	public VoiceAssistant() {
+	}
+
 	private Map<String, Class> commands = new HashMap<String, Class>() {
 		{
 			put("resume", voicecommands.VoiceCommandPlayback.class);
@@ -54,11 +61,11 @@ public class VoiceAssistant implements Runnable {
 			put("set volume to", voicecommands.VoiceCommandVolume.class);
 			put("open", voicecommands.VoiceCommandOpen.class);
 			put("reconfigure", voicecommands.VoiceCommandReconf.class);
+			put("reconfigure programs", voicecommands.VoiceCommandReconf.class);
 		}
 	};
-	private final DecimalFormat df = new DecimalFormat("0");
 
-//  initialize TTS system
+	// initialize TTS system
 	public void initTTS() {
 		Voice.getAvailableVoices().stream().forEach(System.out::println);
 		tts.setVoice("cmu-rms-hsmm");
@@ -82,19 +89,36 @@ public class VoiceAssistant implements Runnable {
 							CmdMask result = constructor.newInstance();
 							result.execute(voiceCommand, tts, m);
 							commandKnown = true;
-							m.oth.o.setWord(voiceCommand);
+							if (Main.getMain().man.get("overlay-module-activated").equalsIgnoreCase("yes")) {
+								m.oth.o.setWord(voiceCommand);
+							}
 							break;
 						}
 					}
 					if (!commandKnown) {
-						for (JPlugin plugin : Manager.plugins) {
-							try {
-								if (plugin.onUnknownVoiceCommand(voiceCommand, tts, m)) {
-									break;
+						for (Map.Entry<String, JPlugin> command : Manager.plugins.entrySet()) {
+							String key = command.getKey();
+							if (key.contains(";")) {
+								String[] commandList = key.split(";");
+								for (String command_pl : commandList) {
+									if (voiceCommand.startsWith(command_pl)) {
+										try {
+											command.getValue().onVoiceCommand(voiceCommand, tts, m);
+											break;
+										} catch (Exception e) {
+
+										}
+									}
 								}
-							} catch (Exception e) {
-								System.out.println("Error on running a VoiceCommand of a Plugin:");
-								e.printStackTrace();
+							} else {
+								if (voiceCommand.startsWith(key)) {
+									try {
+										command.getValue().onVoiceCommand(voiceCommand, tts, m);
+										break;
+									} catch (Exception e) {
+
+									}
+								}
 							}
 						}
 					}
@@ -103,23 +127,29 @@ public class VoiceAssistant implements Runnable {
 				}
 				active = false;
 			}
-			Main.getMain().oth.o.AIactive = active;
+			if (Main.getMain().man.get("overlay-module-activated").equalsIgnoreCase("yes")) {
+				m.oth.o.AIactive = active;
+			}
 		} catch (Exception ex) {
 			System.out.println("Failed at void processCommand!");
 			ex.printStackTrace();
 		}
 	}
 
+	@Override
 	public void run() {
-
-		try {
-			model = new Model("model");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (remote) {
+			startRec();
+		} else {
+			try {
+				model = new Model("model");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			recognizer = new Recognizer(model, 120000, "[\"" + Main.getMain().vocab + "\", \"\"]");
+			startRec();
 		}
-		recognizer = new Recognizer(model, 120000, "[\"" + Main.getMain().vocab + "\", \"[unk]\"]");
-		startRec();
 	}
 
 	public void restart() {
@@ -133,8 +163,11 @@ public class VoiceAssistant implements Runnable {
 		}
 		if (AudibleDelay == 0) {
 			inRange = (getRootMeanSquared(data) > sensibility);
+			if (inRange) {
+				AudibleDelay = 0;
+			}
 		}
-		if (AudibleDelay > 1200) {
+		if (AudibleDelay > 2400) {
 			AudibleDelay = 0;
 		} else {
 			AudibleDelay++;
@@ -158,43 +191,68 @@ public class VoiceAssistant implements Runnable {
 	}
 
 	public void startRec() {
-		initTTS();
-		LibVosk.setLogLevel(LogLevel.DEBUG);
+		if (!remote) {
+			initTTS();
+			LibVosk.setLogLevel(LogLevel.DEBUG);
+		}
 		AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 60000, 16, 2, 4, 44100, false);
-		DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
 		TargetDataLine microphone;
 		try {
-			microphone = (TargetDataLine) AudioSystem.getLine(info);
-			microphone.open(format);
-			microphone.start();
+			DataLine.Info lineInfo = new DataLine.Info(TargetDataLine.class, format);
+			Mixer.Info selectedMixer = null;
+			for (Mixer.Info mixerInfo : AudioSystem.getMixerInfo()) {
+				Mixer mixer = AudioSystem.getMixer(mixerInfo);
+				String audiodev = "";
+				if (System.getenv("AUDIODEV") != null) {
+					audiodev = System.getenv("AUDIODEV");
+				}
+				if (mixer.isLineSupported(lineInfo) && mixer.getMixerInfo().getName().contains(audiodev)) {
+					selectedMixer = mixerInfo;
+					System.out.println("selected Input-Device: " + mixerInfo.getName());
+					break;
+				}
+			}
+			if (selectedMixer != null) {
+				Mixer m = AudioSystem.getMixer(selectedMixer);
+				microphone = (TargetDataLine) m.getLine(lineInfo);
+				microphone.open(format);
+				microphone.start();
 
-			int numBytesRead = 0;
-			int CHUNK_SIZE = 1024;
-			int bytesRead = 0;
-			byte[] b = new byte[4096];
-			Boolean isAudible = false;
-			int counter = 0;
-			while (isRunning) {
-				numBytesRead = microphone.read(b, 0, CHUNK_SIZE);
-				if (isAudible(b))  {
-					if (recognizer.acceptWaveForm(b, numBytesRead)) {
-						String res = recognizer.getResult();
-						if (res != null && res != "{\n" + "  \"text\" : \"\"\n" + "}"
-								&& res != "{\n" + "  \"text\" : \"the\"\n" + "}") {
-							System.out.println("Recognizer >> Got command: " + res);
-							processCommand(res);
-							recognizer.reset();
+				int numBytesRead = 0;
+				int CHUNK_SIZE = 512;
+				byte[] b = new byte[512];
+				while (isRunning) {
+					numBytesRead = microphone.read(b, 0, CHUNK_SIZE);
+					if (isAudible(b)) {
+						if (remote) {
+							client.sendAudio(b);
+						} else {
+							if (recognizer.acceptWaveForm(b, numBytesRead)) {
+								String res = recognizer.getResult();
+								if (res.contains("[unk] ")) {
+									res = res.replaceAll("[unk] ", "");
+								} else if (res.contains("[unk]")) {
+									res = res.replaceAll("[unk]", "");
+								}
+								if (res != null && res != "{\n" + "  \"text\" : \"\"\n" + "}"
+										&& res != "{\n" + "  \"text\" : \"the\"\n" + "}"
+										&& !res.equalsIgnoreCase("{\n" + "  \"text\" : \"\"\n" + "}")) {
+									System.out.println("Recognizer1 >> Got command: " + res);
+									processCommand(res);
+									recognizer.reset();
+								}
+							}
 						}
 					}
 				}
+
+				microphone.close();
+				System.out.println("VA_RECOG_THR >> Exited!");
 			}
-			microphone.close();
-			System.out.println("VA_RECOG_THR >> Exited!");
 		} catch (
 
 		Exception e) {
 			e.printStackTrace();
-			restart();
 		}
 	}
 }

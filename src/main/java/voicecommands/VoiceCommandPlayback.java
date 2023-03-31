@@ -2,9 +2,7 @@ package voicecommands;
 
 import general.CmdMask;
 import configuration.Manager;
-import dbus.mpris.MPrisCTL;
 import general.Main;
-import general.VoiceAssistant;
 import tts.TextToSpeech;
 
 public class VoiceCommandPlayback extends CmdMask{

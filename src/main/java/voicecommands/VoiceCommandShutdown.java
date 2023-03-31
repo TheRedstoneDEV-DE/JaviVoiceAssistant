@@ -2,7 +2,6 @@ package voicecommands;
 
 import general.CmdMask;
 import general.Main;
-import general.VoiceAssistant;
 import tts.TextToSpeech;
 
 public class VoiceCommandShutdown extends CmdMask{

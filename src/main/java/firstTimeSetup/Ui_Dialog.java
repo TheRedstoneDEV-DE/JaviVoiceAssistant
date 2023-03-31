@@ -1,21 +1,15 @@
 package firstTimeSetup;
 
-import javax.swing.plaf.metal.MetalIconFactory.PaletteCloseIcon;
-
 import io.qt.core.QCoreApplication;
-import io.qt.core.QFile;
 import io.qt.core.QRect;
 import io.qt.core.Qt;
-import io.qt.gui.QPalette;
 import io.qt.core.QSize;
-import io.qt.core.QTextStream;
 import io.qt.widgets.QCheckBox;
 import io.qt.widgets.QDialog;
 import io.qt.widgets.QLabel;
 import io.qt.widgets.QLineEdit;
 import io.qt.widgets.QPushButton;
 import io.qt.widgets.QSlider;
-import io.qt.widgets.QStyle;
 
 public class Ui_Dialog {
 
@@ -34,6 +28,8 @@ public class Ui_Dialog {
     public QCheckBox checkBox_6;
     public QSlider MIC_rms;
     public QLabel label_4;
+    public QLineEdit OV_pos;
+    public QLabel label_5;
     private String theme = "\n"
     		+ "/*-----QWidget-----*/\n"
     		+ "QWidget\n"
@@ -196,7 +192,7 @@ public class Ui_Dialog {
 
     public void setupUi(QDialog Dialog) {
 		Dialog.setObjectName("Setup");
-		Dialog.resize(new QSize(443, 478).expandedTo(Dialog.minimumSizeHint()));
+		Dialog.resize(new QSize(443, 500).expandedTo(Dialog.minimumSizeHint()));
 		Dialog.setStyleSheet(theme);
 		pushButton = new QPushButton(Dialog);
 		pushButton.setObjectName("pushButton");
@@ -222,11 +218,13 @@ public class Ui_Dialog {
 		MP_objpath = new QLineEdit(Dialog);
 		MP_objpath.setObjectName("MP_objpath");
 		MP_objpath.setGeometry(new QRect(10, 120, 301, 34));
+		/*
 		OV_en = new QCheckBox(Dialog);
 		OV_en.setObjectName("OV_en");
 		OV_en.setGeometry(new QRect(10, 300, 141, 24));
 		OV_en.setChecked(true);
 		OV_en.setDisabled(true);
+		*/
 		SYS_en = new QCheckBox(Dialog);
 		SYS_en.setObjectName("SYS_en");
 		SYS_en.setGeometry(new QRect(10, 170, 161, 24));
@@ -238,27 +236,33 @@ public class Ui_Dialog {
 		SYS_temp = new QLineEdit(Dialog);
 		SYS_temp.setObjectName("SYS_temp");
 		SYS_temp.setGeometry(new QRect(10, 220, 301, 34));
+		label_5 = new QLabel(Dialog);
+		label_5.setObjectName("label_5");
+		label_5.setGeometry(new QRect(10, 260, 101, 20));
+		OV_pos = new QLineEdit(Dialog);
+		OV_pos.setObjectName("OV_pos");
+		OV_pos.setGeometry(new QRect(10, 280, 301, 34));
 		SYS_smi = new QCheckBox(Dialog);
 		SYS_smi.setObjectName("SYS_smi");
-		SYS_smi.setGeometry(new QRect(10, 250, 161, 24));
+		SYS_smi.setGeometry(new QRect(10, 310, 161, 24));
 		DC_en = new QCheckBox(Dialog);
 		DC_en.setObjectName("DC_en");
-		DC_en.setGeometry(new QRect(10, 320, 171, 24));
+		DC_en.setGeometry(new QRect(10, 350, 171, 24));
 		DC_en.setChecked(true);
 		checkBox_6 = new QCheckBox(Dialog);
 		checkBox_6.setObjectName("checkBox_6");
 		checkBox_6.setEnabled(false);
-		checkBox_6.setGeometry(new QRect(10, 340, 171, 24));
+		checkBox_6.setGeometry(new QRect(10, 370, 171, 24));
 		checkBox_6.setCheckable(true);
 		checkBox_6.setChecked(true);
 		MIC_rms = new QSlider(Dialog);
 		MIC_rms.setObjectName("MIC_rms");
-		MIC_rms.setGeometry(new QRect(10, 410, 311, 20));
+		MIC_rms.setGeometry(new QRect(10, 440, 311, 20));
 		MIC_rms.setValue(20);
 		MIC_rms.setOrientation(Qt.Orientation.Horizontal);
 		label_4 = new QLabel(Dialog);
 		label_4.setObjectName("label_4");
-		label_4.setGeometry(new QRect(110, 390, 131, 20));
+		label_4.setGeometry(new QRect(110, 420, 131, 20));
 		retranslateUi(Dialog);
 
 	} // setupUi
@@ -271,7 +275,7 @@ public class Ui_Dialog {
 		label.setText(QCoreApplication.translate("Dialog", "Busname:", null));
 		label_2.setText(QCoreApplication.translate("Dialog", "Obejectpath:", null));
 		MP_objpath.setText(QCoreApplication.translate("Dialog", "/org/mpris/MediaPlayer2", null));
-		OV_en.setText(QCoreApplication.translate("Dialog", "PLACEHOLDER", null));
+		//OV_en.setText(QCoreApplication.translate("Dialog", "PLACEHOLDER", null));
 		SYS_en.setText(QCoreApplication.translate("Dialog", "Overlay enabled", null));
 		label_3.setText(QCoreApplication.translate("Dialog", "CPU temp file:", null));
 		SYS_temp.setText(QCoreApplication.translate("Dialog", "/sys/class/thermal/thermal_zone0/temp", null));
@@ -279,5 +283,7 @@ public class Ui_Dialog {
 		DC_en.setText(QCoreApplication.translate("Dialog", "Discord-RPC enabled", null));
 		checkBox_6.setText(QCoreApplication.translate("Dialog", "Use local recognition", null));
 		label_4.setText(QCoreApplication.translate("Dialog", "Mic RMS threshold:", null));
+		label_5.setText(QCoreApplication.translate("Dialog", "Overlay postion:", null));
+		OV_pos.setText(QCoreApplication.translate("Dialog", "0,0",null));
 	} // retranslateUi
 }

@@ -8,8 +8,6 @@ Liecence Infomation of used libraries can be found here: https://theredstonedev-
 
 - This is still Work-In-Progress Software
 
-- **The traffic beween client and local server is not encrypted!** If you use only the built-in recognizer (without setting up a local server) there should everything be nothing insecure
-
 **Please inform me about bugs you have found via the issues!**
 
 #### Used libraries in this Project:
@@ -23,8 +21,6 @@ Liecence Infomation of used libraries can be found here: https://theredstonedev-
 - java-discord-rpc (Discord RPC)
 
 - dbus java for communicating with MPRIS
-
-
 
 ### Building and Running
 
@@ -52,36 +48,92 @@ Requirements to run (only basic funtionality):
   
   *meida control, volume control and some other features WILL NOT WORK on Windows!*
 
+#### Running standalone:
 
+ ---
 
 1. Clone the repository:
 
-`git clone https://github.com/TheRedstoneDEV-DE/VoiceAssistant` 
+   `git clone https://github.com/TheRedstoneDEV-DE/VoiceAssistant` 
+
+   and get the voice model for vosk from (the small one is recommended)
+   [VOSK Models](https://alphacephei.com/vosk/models)
+   unzip it, rename the folder inside it to 'models' and put it into the project root
 
 2. Build
 
-`mvn install`
+   `mvn install`
 
 3. Run the Jar file, which was generated in the 'target' folder
 
-`java -jar [JARFILE]`
+   `java -jar [JARFILE]`
 
 4. Cofigure via setup window
 
 The fields in the window should be selfexplaining.
+
 - 'Overlay position' definines the coordinates for the overlay (should only be necessary, if you have multiple screens)
 - 'CPU temp file' defines the file, in which the cpu temperature is logged by the kernel (if you don't have the overlay enabled, this is not used at all)
-- any MPRIS settings are just defining, which player you are targeting in the dbus interface (you can start, pause and skip titles with voicecommands)
+- any MPRIS settings are just defining, which player you are targeting in the dbus interface (you can start, pause and skip titles with voicecommands)#
 
-### List of commands
+#### Running with recognition server:
 
 ---
 
-| command                                      | short explanation                                                     |
-| -------------------------------------------- | --------------------------------------------------------------------- |
-| hey computer                                 | just the base command, has to be said, before any other voice command |
-| set volume to [number between 10-90] percent | sets the volume of the main audio output via amixer                   |
-| open [application name]                      | opens the named application in another "screen"                       |
-| reconfigure                                  | opens the setup ui again (in case you missconfigured something)       |
-| [hide/show] overlay                          | hides or shows the overlay                                            |
-| pause/resume/next/previous                   | plays/pauses a mediaplayer, skippes one title forward/backward        |
+1. Clone the repository:
+
+     `git clone https://github.com/TheRedstoneDEV-DE/VoiceAssistant`
+
+      and get the voice model for vosk from (the small one is recommended)
+
+      [VOSK Models](https://alphacephei.com/vosk/models)
+      unzip it, rename the folder inside it to 'models' and put it into the project root on          the server.
+
+2. Build
+
+      `mvn install`
+
+3. Copy the Jar file from the 'target' folder in the project root and run the client standalone for setup.
+
+       `java -jar [JARFILE]`
+
+4. Copy the built jar from the target folder, the 'models' folder and the 'keys' folder to the server device (here it really could be Windows and should'n affect anything)
+
+5. Generate the Keystore and Truststore for Client and Server on the Server.
+   To do that, go into the 'keys' folder and execute the bash file. Next you will be asked some questions, because of the certificate and a password for the key (you should remember it, because you need it when running)
+   
+   `bash genkeys.sh`
+
+6. Move the 'client-trust.jks' from the 'keys' folder of the server to the 'keys' folder of the client
+
+7. Run!
+   First run the server.
+   
+   `KEY_PASSPHRASE=[Password of the Keystore] java -jar [JARFILE] --server`
+   
+   Then the client (you could even use multiple with one server).
+   
+   `KEY_PASSPHRASE=[password of the Truststore] java -jar [JARFILE] --client [server IP address]` 
+
+### ### List of commands
+
+---
+
+| command                                      | short explanation                                                             |
+| -------------------------------------------- | ----------------------------------------------------------------------------- |
+| hey computer                                 | just the base command, has to be said, before any other voice command         |
+| set volume to [number between 10-90] percent | sets the volume of the main audio output via amixer                           |
+| open [application name]                      | opens the named application in another "screen"                               |
+| reconfigure                                  | opens the setup ui again (in case you missconfigured something)               |
+| reconfigure programs                         | opens the setup ui for adding programs to the open [application name] command |
+| [hide/show] overlay                          | hides or shows the overlay                                                    |
+| pause/resume/next/previous                   | plays/pauses a mediaplayer, skippes one title forward/backward                |
+
+### List of Environment variables
+
+---
+
+| Env variable  | explanation                                                                                                                             |
+|:------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `OUTPUT_GAIN` | adjusts the output volume of the tts system (in case you are using it with some audio server like alsa)                                 |
+| `AUDIODEV`    | sets the audio device for input and ouput, but only if it is supported, if it is not supported the voice assistant won't have any audio |

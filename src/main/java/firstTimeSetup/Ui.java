@@ -68,6 +68,10 @@ public class Ui extends QDialog {
 		}
 
 		cfgman.set("rms-threshold", Integer.toString(diag.MIC_rms.value()));
+		cfgman.set("overlay-position", diag.OV_pos.text());
+		cfgman.set("progNames", "");
+		cfgman.set("progCommands","");
+
 
 		this.close();
 		Main.getMain().restart();

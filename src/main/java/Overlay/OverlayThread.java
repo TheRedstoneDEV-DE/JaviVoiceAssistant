@@ -14,6 +14,9 @@ public class OverlayThread implements Runnable {
 				app.initialize(FArgs);
 				o = new Overlay();
 				app.exec();
+			}else { 
+				o = new Overlay();
+				app.exec();
 			}
 		} catch (Exception e) {
 			System.out.println("Thread for Overlay had failed!");

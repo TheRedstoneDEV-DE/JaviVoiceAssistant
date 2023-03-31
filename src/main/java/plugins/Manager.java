@@ -5,14 +5,14 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 import general.Main;
 
 public class Manager {
-	public static ArrayList<JPlugin> plugins = new ArrayList<JPlugin>();
+	public static HashMap<String,JPlugin> plugins = new HashMap<String,JPlugin>();
 
 	public void loadPlugins() {
 		File dir = new File("plugins/");
@@ -39,7 +39,7 @@ public class Manager {
 						Class<? extends JPlugin> plugin = jarClass.asSubclass(JPlugin.class);
 						Constructor<? extends JPlugin> constructor = plugin.getConstructor();
 						JPlugin result = constructor.newInstance();
-						plugins.add(result);
+						plugins.put(CFGManager.get("NewCommands",stream),result);
 						if (newVocab != null) {
 							for (String word : newVocab) {
 								if(!Main.getMain().vocab.contains(word)) {
