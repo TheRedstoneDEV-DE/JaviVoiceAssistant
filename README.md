@@ -1,6 +1,6 @@
-# VoiceAssistant
+#VoiceAssistant
 
-A multifunction and fully offline usable voice assistant written in Java
+A multifunction and fully offline usable open-source voice assistant written in Java
 
 Liecence Infomation of used libraries can be found here: https://theredstonedev-de.github.io/VoiceAssistant/target/site/
 
