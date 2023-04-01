@@ -115,7 +115,7 @@ The fields in the window should be selfexplaining.
    
    `KEY_PASSPHRASE=[password of the Truststore] java -jar [JARFILE] --client [server IP address]` 
 
-### ### List of commands
+### List of commands
 
 ---
 
