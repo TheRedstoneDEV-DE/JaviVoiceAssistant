@@ -1,7 +1,5 @@
 package dbus.mpris;
 
-import java.util.List;
-
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.interfaces.DBusInterface;
 

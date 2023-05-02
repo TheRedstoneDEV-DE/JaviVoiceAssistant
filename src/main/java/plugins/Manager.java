@@ -42,7 +42,7 @@ public class Manager {
 						plugins.put(CFGManager.get("NewCommands",stream),result);
 						if (newVocab != null) {
 							for (String word : newVocab) {
-								if(!Main.getMain().vocab.contains(word)) {
+								if(!Main.getMain().vocab.contains(" " + word)) {
 									Main.getMain().vocab = Main.getMain().vocab + " " + word;
 								}
 							}

@@ -25,7 +25,7 @@ public class Main {
 	public com.discord.DiscordRPCStatus dcRPC;
 	VoiceAssistant va;
 	public configuration.Manager man = new configuration.Manager();
-	public String vocab = "programs reconfigure stop the hey computer pause resume next previous set volume to percent open hide show overlay what is the cpu usage start conversation ten twenty thirty forty fifty sixty seventy eighty ninety ";
+	public String vocab = "programs shutdown reconfigure stop the hey computer pause resume next previous set volume to percent open hide show overlay what is the cpu usage start conversation ten twenty thirty forty fifty sixty seventy eighty ninety ";
 	public int sensibility = 20;
 
 	public static void main(String[] args) {

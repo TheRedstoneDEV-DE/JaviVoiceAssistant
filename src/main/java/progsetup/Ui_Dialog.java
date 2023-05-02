@@ -7,7 +7,6 @@ import io.qt.core.QSize;
 import io.qt.widgets.QDialog;
 import io.qt.widgets.QPushButton;
 import io.qt.widgets.QTableWidget;
-import io.qt.widgets.QTableWidgetItem;
 import io.qt.widgets.QTextEdit;
 
 public class Ui_Dialog {
