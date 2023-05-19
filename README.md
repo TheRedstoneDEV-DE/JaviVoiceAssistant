@@ -19,10 +19,11 @@
       <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/theredstonedev-de/voiceassistant?color=0088ff" />
     </a>
     <br />
-    <br />
   </p>
 
 <p align="center">
+ Liecence Infomation of used libraries can be found here: https://theredstonedev-de.github.io/VoiceAssistant/target/site/
+
 ⚠️ This is still Work-In-Progress Software!
 </p>
 
