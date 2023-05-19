@@ -28,12 +28,12 @@
  Please inform me about bugs you have found via the issues!
 ⚠️ This is still Work-In-Progress Software!
 </p>
-
   <br />
-  <br />
-
 <hr>
 
+  <br />
+  <br />
+  
 <div align="center">
 <h4 id="used-libraries-in-this-project-">Used libraries in this Project:</h4>
 <ul>
