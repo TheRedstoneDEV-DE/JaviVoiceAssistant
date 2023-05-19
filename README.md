@@ -9,8 +9,8 @@
     <a href="https://github.com/theredstonedev-de/voiceassistant/actions">
       <img alt="Tests Passing" src="https://github.com/anuraghazra/github-readme-stats/workflows/Test/badge.svg" />
     </a>
-    <a href="https://github.com/theredstonedev-de/release">
-      <img alt="GitHub Release" src="https://img.shields.io/github/release/theredstonedev-de/voiceassistant" />
+    <a href="https://github.com/theredstonedev-de/releases">
+      <img alt="GitHub Release" src="https://img.shields.io/github/releases/theredstonedev-de/voiceassistant" />
     </a>
     <a href="https://codecov.io/gh/anuraghazra/github-readme-stats">
       <img src="https://codecov.io/gh/anuraghazra/github-readme-stats/branch/master/graph/badge.svg" />
