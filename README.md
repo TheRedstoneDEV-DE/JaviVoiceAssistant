@@ -9,14 +9,14 @@
     <a href="https://github.com/theredstonedev-de/voiceassistant/actions">
       <img alt="Tests Passing" src="https://github.com/anuraghazra/github-readme-stats/workflows/Test/badge.svg" />
     </a>
-    <a href="https://github.com/theredstonedev-de/releases">
+    <a href="https://github.com/theredstonedev-de/release">
       <img alt="GitHub Release" src="https://img.shields.io/github/release/theredstonedev-de/voiceassistant" />
     </a>
     <a href="https://codecov.io/gh/anuraghazra/github-readme-stats">
       <img src="https://codecov.io/gh/anuraghazra/github-readme-stats/branch/master/graph/badge.svg" />
     </a>
     <a href="https://github.com/TheRedstoneDEV-DE/VoiceAssistant/issues">
-      <img alt="Issues" src="https://img.shields.io/github/issues/devellight/voiceassistant?color=0088ff" />
+      <img alt="Issues" src="https://img.shields.io/github/issues/theredstonedev-de/voiceassistant?color=0088ff" />
     </a>
     <a href="https://github.com/TheRedstoneDEV-DE/VoiceAssistant/pulls">
       <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/theredstonedev-de/voiceassistant?color=0088ff" />
