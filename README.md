@@ -33,7 +33,7 @@
 
   <br />
 
-<div text-decoration="none" align="center">
+<div text-decoration:none; align="center">
 <h4 id="used-libraries-in-this-project-">Used libraries in this Project:</h4>
 <ul>
 <li><p>MaryTTS (Text-To-Speech)</p>
