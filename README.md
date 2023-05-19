@@ -73,6 +73,7 @@
 <p><em>meida control, volume control and some other features WILL NOT WORK on Windows!</em></p>
 </li>
 </ul>
+ </div>
 <h4 id="running-standalone-">Running standalone:</h4>
 <hr>
 <ol>
