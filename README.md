@@ -18,8 +18,8 @@
     <a href="https://github.com/anuraghazra/github-readme-stats/issues">
       <img alt="Issues" src="https://img.shields.io/github/issues/anuraghazra/github-readme-stats?color=0088ff" />
     </a>
-    <a href="[https://github.com/theredstonedev-de/voiceassistant/pulls](https://github.com/TheRedstoneDEV-DE/VoiceAssistant/pulls)">
-      <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/anuraghazra/github-readme-stats?color=0088ff" />
+    <a href="https://github.com/TheRedstoneDEV-DE/VoiceAssistant/pulls">
+      <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/theredstonedev-de/voiceassistant?color=0088ff" />
     </a>
     <br />
     <br />
