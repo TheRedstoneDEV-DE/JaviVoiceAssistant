@@ -29,7 +29,6 @@
 </p>
 
 
-**Please inform me about bugs you have found via the issues!**
 
 #### Used libraries in this Project:
 
