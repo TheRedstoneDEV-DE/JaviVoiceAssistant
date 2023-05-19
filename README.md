@@ -31,9 +31,7 @@
   <br />
 <hr>
 
-  <br />
-
-<h4 id="used-libraries-in-this-project-">Used libraries in this Project:</h4>
+<h3 id="used-libraries-in-this-project-">Used libraries in this Project:</h3>
 <ul>
 <li><p>MaryTTS (Text-To-Speech)</p>
 </li>
