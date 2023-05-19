@@ -28,6 +28,8 @@
 ⚠️ This is still Work-In-Progress Software!
 </p>
 
+<hr>
+
 <div align="center">
 <h4 id="used-libraries-in-this-project-">Used libraries in this Project:</h4>
 <ul>
