@@ -28,6 +28,7 @@
 ⚠️ This is still Work-In-Progress Software!
 </p>
 
+<div align="center">
 <h4 id="used-libraries-in-this-project-">Used libraries in this Project:</h4>
 <ul>
 <li><p>MaryTTS (Text-To-Speech)</p>
@@ -180,4 +181,4 @@ First run the server.</p>
 </tr>
 </tbody>
 </table>
-
+</div>
