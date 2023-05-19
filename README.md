@@ -128,8 +128,8 @@ First run the server.</p>
 <p><code>KEY_PASSPHRASE=[password of the Truststore] java -jar [JARFILE] --client [server IP address]</code> </p>
 </li>
 </ol>
-<h3 id="list-of-commands">List of commands</h3>
 <hr>
+<h3 id="list-of-commands">List of commands</h3>
 <table>
 <thead>
 <tr>
@@ -168,8 +168,8 @@ First run the server.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="list-of-environment-variables">List of Environment variables</h3>
 <hr>
+<h3 id="list-of-environment-variables">List of Environment variables</h3>
 <table>
 <thead>
 <tr>
