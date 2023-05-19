@@ -23,7 +23,7 @@
 
 <p align="center">
  Liecence Infomation of used libraries can be found here: https://theredstonedev-de.github.io/VoiceAssistant/target/site/
-
+ Please inform me about bugs you have found via the issues!
 ⚠️ This is still Work-In-Progress Software!
 </p>
 
