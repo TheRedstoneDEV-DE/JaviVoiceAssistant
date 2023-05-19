@@ -6,7 +6,7 @@
  <p align="center">A multifunction and fully offline usable open-source voice assistant written in Java!</p>
 </p>
   <p align="center">
-    <a href="https://github.com/anuraghazra/github-readme-stats/actions">
+    <a href="https://github.com/theredstonedev-de/voiceassistant/actions">
       <img alt="Tests Passing" src="https://github.com/anuraghazra/github-readme-stats/workflows/Test/badge.svg" />
     </a>
     <a href="https://github.com/anuraghazra/github-readme-stats/graphs/contributors">
