@@ -9,7 +9,7 @@
     <a href="https://github.com/theredstonedev-de/voiceassistant/actions">
       <img alt="Tests Passing" src="https://github.com/anuraghazra/github-readme-stats/workflows/Test/badge.svg" />
     </a>
-    <a href="https://github.com/theredstonedev-de/releases">
+    <a href="https://github.com/TheRedstoneDEV-DE/VoiceAssistant/releases">
       <img alt="GitHub Release" src="https://img.shields.io/github/release/theredstonedev-de/voiceassistant" />
     </a>
     <a href="https://codecov.io/gh/anuraghazra/github-readme-stats">
