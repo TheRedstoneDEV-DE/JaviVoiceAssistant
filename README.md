@@ -71,8 +71,11 @@
 </li>
 </ul>
  </div>
-<h4 id="running-standalone-">Running standalone:</h4>
-<hr>
+ 
+ <hr>
+ 
+<h3 id="running-standalone-">Running standalone:</h3>
+
 <ol>
 <li><p>Clone the repository:</p>
 <p><code>git clone https://github.com/TheRedstoneDEV-DE/VoiceAssistant</code> </p>
@@ -95,8 +98,8 @@ unzip it, rename the folder inside it to &#39;model&#39; and put it into the pro
 <li>&#39;CPU temp file&#39; defines the file, in which the cpu temperature is logged by the kernel (if you don&#39;t have the overlay enabled, this is not used at all)</li>
 <li>any MPRIS settings are just defining, which player you are targeting in the dbus interface (you can start, pause and skip titles with voicecommands)#</li>
 </ul>
-<h4 id="running-with-recognition-server-">Running with recognition server:</h4>
 <hr>
+<h3 id="running-with-recognition-server-">Running with recognition server:</h3>
 <ol>
 <li><p>Clone the repository:</p>
 <p>  <code>git clone https://github.com/TheRedstoneDEV-DE/VoiceAssistant</code></p>
