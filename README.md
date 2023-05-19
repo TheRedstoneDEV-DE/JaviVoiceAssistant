@@ -12,9 +12,6 @@
     <a href="https://github.com/TheRedstoneDEV-DE/VoiceAssistant/releases">
       <img alt="GitHub Release" src="https://img.shields.io/github/release/theredstonedev-de/voiceassistant" />
     </a>
-    <a href="https://codecov.io/gh/anuraghazra/github-readme-stats">
-      <img src="https://codecov.io/gh/anuraghazra/github-readme-stats/branch/master/graph/badge.svg" />
-    </a>
     <a href="https://github.com/TheRedstoneDEV-DE/VoiceAssistant/issues">
       <img alt="Issues" src="https://img.shields.io/github/issues/theredstonedev-de/voiceassistant?color=0088ff" />
     </a>
