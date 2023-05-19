@@ -24,7 +24,6 @@
 
 Liecence Infomation of used libraries can be found here: https://theredstonedev-de.github.io/VoiceAssistant/target/site/
 
-**Please Note:**
 >[!WARNING]
 >This is still Work-In-Progress Software
 
