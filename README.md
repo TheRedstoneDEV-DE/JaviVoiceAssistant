@@ -42,8 +42,9 @@
 <li><p>dbus java for communicating with MPRIS</p>
 </li>
 </ul>
-<h3 id="building-and-running">Building and Running</h3>
 <hr>
+<h3 id="building-and-running">Building and Running</h3>
+
 <p>Requirements to run fully:</p>
 <ul>
 <li><p>a PC based on x86_64 (amd64) with a Linux installation</p>
