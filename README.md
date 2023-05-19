@@ -1,7 +1,7 @@
 
 
 <p align="center">
- <img width="100px" src="https://res.cloudinary.com/anuraghazra/image/upload/v1594908242/logo_ccswme.svg" align="center" alt="GitHub Readme Stats" />
+ <img width="100px" src="https://github.com/TheRedstoneDEV-DE/VoiceAssistant/blob/main/javi-low-resolution-logo-color-on-transparent-background.png" align="center" alt="GitHub Readme Stats" />
  <h2 align="center">OpenSource VoiceAssitant Javi</h2>
  <p align="center">A multifunction and fully offline usable open-source voice assistant written in Java!</p>
 </p>
