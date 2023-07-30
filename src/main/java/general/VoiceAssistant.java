@@ -38,12 +38,14 @@ public class VoiceAssistant implements Runnable {
 	public boolean isRunning = true;
 	public TextToSpeech tts;
 	Boolean active = false;
+	Boolean restart = false;
+	Boolean fulldict = false;
 	Main m = Main.getMain();
 
-	public VoiceAssistant(boolean isRemote, Client connection) {
+	public VoiceAssistant(boolean isRemote, Client connection, boolean mimic, String host) {
 		remote = isRemote;
 		client = connection;
-		tts = new TextToSpeech(isRemote, connection);
+		tts = new TextToSpeech(isRemote, connection, mimic, host);
 	}
 
 	public VoiceAssistant() {
@@ -76,7 +78,10 @@ public class VoiceAssistant implements Runnable {
 		try {
 			final JSONObject obj = new JSONObject(voiceCommand);
 			voiceCommand = obj.getString("text");
-			if (voiceCommand.equalsIgnoreCase("hey computer")) {// activation command
+			if (voiceCommand.startsWith("the")){
+				voiceCommand = voiceCommand.replaceFirst("the","");
+			}
+			if (voiceCommand.equalsIgnoreCase("hey javi")) {// activation command
 				active = true;
 				tts.speak("Hey");
 			} else if (active) {
@@ -152,9 +157,40 @@ public class VoiceAssistant implements Runnable {
 		}
 	}
 
-	public void restart() {
+	private void rst() {
 		System.out.println("restarting Recogniton...");
+		try {
+			if (!remote) {
+				if (!fulldict) {
+					String vocab = Main.getMain().vocab;
+					String[] newVoc = Main.getMain().man.get("progNames").split(";");
+					for (String voc : newVoc){
+						if (!vocab.contains(voc)){
+							vocab = vocab + " " + voc;
+						}
+					}
+					recognizer = new Recognizer(model, 120000, "[\"" + vocab + "\", \"\"]");
+				} else {
+					recognizer = new Recognizer(model, 120000);
+				}
+			}else{
+
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		fulldict = false;
+		restart=false;
 		startRec();
+	}
+	public void restartWithFullDict(){
+			fulldict = true;
+			isRunning = false;
+			restart = true;
+	}
+	public void restart(){
+		isRunning = false;
+		restart = true;
 	}
 
 	public boolean isAudible(byte[] data) {
@@ -195,6 +231,7 @@ public class VoiceAssistant implements Runnable {
 			initTTS();
 			LibVosk.setLogLevel(LogLevel.DEBUG);
 		}
+		isRunning = true;
 		AudioFormat format = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED, 60000, 16, 2, 4, 44100, false);
 		TargetDataLine microphone;
 		try {
@@ -237,7 +274,7 @@ public class VoiceAssistant implements Runnable {
 								if (res != null && res != "{\n" + "  \"text\" : \"\"\n" + "}"
 										&& res != "{\n" + "  \"text\" : \"the\"\n" + "}"
 										&& !res.equalsIgnoreCase("{\n" + "  \"text\" : \"\"\n" + "}")) {
-									System.out.println("Recognizer1 >> Got command: " + res);
+									System.out.println("Recognizer >> Got command: " + res);
 									processCommand(res);
 									recognizer.reset();
 								}
@@ -245,13 +282,14 @@ public class VoiceAssistant implements Runnable {
 						}
 					}
 				}
-
+				microphone.drain();
 				microphone.close();
-				System.out.println("VA_RECOG_THR >> Exited!");
+				m.close();
+				if(restart){
+					rst();
+				}
 			}
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

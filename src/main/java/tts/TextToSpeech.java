@@ -1,6 +1,11 @@
 package tts;
 
+import java.io.BufferedInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
@@ -29,11 +34,15 @@ public class TextToSpeech {
 	private MaryInterface marytts;
 	private Boolean remote;
 	private Client client;
+	private Boolean mimic;
+	private String host;
 
-	public TextToSpeech(boolean isRemote, Client connection) {
+	public TextToSpeech(boolean isRemote, Client connection, boolean mimic, String host) {
 		remote = isRemote;
 		client=connection;
-		if (!isRemote) {
+		this.mimic=mimic;
+		this.host = host;
+		if (!isRemote && !mimic) {
 			try {
 				marytts = new LocalMaryInterface();
 
@@ -44,16 +53,39 @@ public class TextToSpeech {
 	}
 
 	public void speak(String text) {
-		if (remote) {
-			client.send(("TTS_PACKET:"+text+"\n").getBytes());
-		} else {
+		if (!mimic) {
+			if (remote) {
+				client.send(("TTS_PACKET:" + text + "\n").getBytes());
+			} else {
 
-			try (AudioInputStream audio = marytts.generateAudio(text)) {
-				AudioPlayer ap = new AudioPlayer(audio);
-				ap.play();
+				try (AudioInputStream audio = marytts.generateAudio(text)) {
+					AudioPlayer ap = new AudioPlayer(audio);
+					ap.play();
 
-			} catch (Exception ex) {
-				Logger.getLogger(getClass().getName()).log(Level.WARNING, "Error saying phrase.", ex);
+				} catch (Exception ex) {
+					Logger.getLogger(getClass().getName()).log(Level.WARNING, "Error saying phrase.", ex);
+				}
+			}
+		}else{
+			try {
+				String voice = "en_US/cmu-arctic_low%23rms";
+				URL url = new URL("http://"+host+"/api/tts?voice="+voice);
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setRequestMethod("POST");
+
+				// set request parameters
+				conn.setDoOutput(true);
+				OutputStream os = conn.getOutputStream();
+				os.write(text.getBytes());
+				os.flush();
+				os.close();
+
+				InputStream in = new BufferedInputStream(conn.getInputStream());
+				AudioInputStream ais = AudioSystem.getAudioInputStream(in);
+				AudioPlayer player = new AudioPlayer(ais);
+				player.play();
+			}catch(Exception e){
+				e.printStackTrace();
 			}
 		}
 	}
@@ -71,7 +103,7 @@ public class TextToSpeech {
 	}
 
 	public void setVoice(String voice) {
-		marytts.setVoice(voice);
+		if(!mimic) marytts.setVoice(voice);
 	}
 
 }

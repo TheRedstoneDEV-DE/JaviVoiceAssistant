@@ -52,7 +52,8 @@ public class AudioPlayer {
 					if (nRead >= 0) {
 						if (sdl.available() >= 12000) {
 							sdl.write(abData, 0, nRead);
-							Thread.sleep(368);
+							float delay = ((12000/(format.getSampleRate()* format.getChannels()*format.getSampleSizeInBits()/8))*1000);
+							Thread.sleep((long) Math.rint(delay));
 						}
 					}
 				}

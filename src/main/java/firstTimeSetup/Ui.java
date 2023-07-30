@@ -4,12 +4,16 @@ import configuration.Manager;
 import general.Main;
 import io.qt.widgets.QApplication;
 import io.qt.widgets.QDialog;
+import tts.TextToSpeech;
 
 public class Ui extends QDialog {
 	Ui_Dialog diag = new Ui_Dialog();
 	Manager cfgman = new Manager();
-
-	public static void init() {
+	static Boolean rec;
+	static TextToSpeech tts;
+	public static void init(boolean reconf, TextToSpeech tts) {
+		rec = reconf;
+		Ui.tts = tts;
 		if (!general.Main.getMain().QtInitialized) {
 			QApplication.initialize(new String[] { "Test", "" });
 			Ui mainw = new Ui();
@@ -69,12 +73,17 @@ public class Ui extends QDialog {
 
 		cfgman.set("rms-threshold", Integer.toString(diag.MIC_rms.value()));
 		cfgman.set("overlay-position", diag.OV_pos.text());
-		cfgman.set("progNames", "");
-		cfgman.set("progCommands","");
-
+		if (!rec) {
+			cfgman.set("progNames", "");
+			cfgman.set("progCommands", "");
+		}
 
 		this.close();
-		Main.getMain().restart();
+		if (!rec) {
+			Main.main(new String[]{"example.jar"});
+		}else{
+			tts.speak("configuration saved, to apply do a full restart of the application");
+		}
 		try {
 			Thread.sleep(3000);
 		} catch (InterruptedException e) {

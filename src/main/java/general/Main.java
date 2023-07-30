@@ -25,7 +25,7 @@ public class Main {
 	public com.discord.DiscordRPCStatus dcRPC;
 	VoiceAssistant va;
 	public configuration.Manager man = new configuration.Manager();
-	public String vocab = "programs shutdown reconfigure stop the hey computer pause resume next previous set volume to percent open hide show overlay what is the cpu usage start conversation ten twenty thirty forty fifty sixty seventy eighty ninety ";
+	public String vocab = "programs shutdown reconfigure stop the hey javi pause resume next previous set volume to percent open hide show overlay what is the cpu usage start conversation ten twenty thirty forty fifty sixty seventy eighty ninety ";
 	public int sensibility = 20;
 
 	public static void main(String[] args) {
@@ -47,6 +47,20 @@ public class Main {
 						System.exit(0);
 					}
 				}
+				boolean mimic = false;
+				String host = "";
+				if (args.length == 2){
+					if (args[0].equals("--mimic3")){
+						mimic = true;
+						host = args[1];
+					}
+				}else if(args.length == 4){
+					if (args[2].equals("--mimic3")){
+						mimic = true;
+						host = args[3];
+					}
+				}
+
 				Logger.getRootLogger().setLevel(Level.OFF);
 				System.out.println("initializing modules...");
 				System.out.println("Overlay...");
@@ -97,22 +111,24 @@ public class Main {
 				System.out.println();
 
 				main.init = true;
-				if (args.length > 0) {
+				if (args.length == 2) {
 					if (args[0].equalsIgnoreCase("--client") && args.length == 2) {
 						props.setProperty("javax.net.ssl.trustStore", "keys/client-trust.jks");
 						props.setProperty("javax.net.ssl.trustStorePassword", System.getenv("KEY_PASSPHRASE"));
 						System.out.println("Test passed");
 						Client conncli = new Client();
-						main.va = new VoiceAssistant(true, conncli);
+						main.va = new VoiceAssistant(true, conncli, mimic, host);
 						Thread clientTH = new Thread() {
 							public void run() {
 								conncli.connect(args[1], main.vocab, main.va);
 							}
 						};
 						clientTH.start();
+					}else{
+						main.va = new VoiceAssistant(false, null, mimic, host);
 					}
 				} else {
-					main.va = new VoiceAssistant(false, null);
+					main.va = new VoiceAssistant(false, null, mimic, host);
 				}
 				Thread tva = new Thread(main.va);
 				main.va.sensibility = Integer.parseInt(main.man.get("rms-threshold"));
@@ -139,13 +155,6 @@ public class Main {
 	}
 
 	public void restart() {
-		if (!init) {
-			System.out.println("Configurations done! Please start the program again now!");
-			System.exit(0);
-		} else {
-			RST = true;
-			restarted = true;
-			va.isRunning = false;
-		}
+		main.va.restart();
 	}
 }
