@@ -111,6 +111,7 @@ unzip it, rename the folder inside it to &#39;model&#39; and put it into the pro
 <p>   <code>mvn install</code></p>
 </li>
 <li><p>Copy the Jar file from the &#39;target&#39; folder in the project root and run the client standalone for setup.</p>
+<p style="color: red">Warning: if you are using pipewire it may not work you can find a fix in pipewire-fix.md</p>
 <pre><code>`java -jar [JARFILE]`
 </code></pre></li>
 <li><p>Copy the built jar from the target folder, the &#39;model&#39; folder and the &#39;keys&#39; folder to the server device (here it really could be Windows and should&#39;n affect anything)</p>
@@ -125,6 +126,7 @@ To do that, go into the &#39;keys&#39; folder and execute the bash file. Next yo
 First run the server.</p>
 <p><code>KEY_PASSPHRASE=[Password of the Keystore] java -jar [JARFILE] --server</code></p>
 <p>Then the client (you could even use multiple with one server).</p>
+<p style="color: red">Warning: if you are using pipewire it may not work you can find a fix in pipewire-fix.md</p>
 <p><code>KEY_PASSPHRASE=[password of the Truststore] java -jar [JARFILE] --client [server IP address]</code> </p>
 </li>
 </ol>
