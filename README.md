@@ -1,4 +1,4 @@
-
+<html>
 
 <p align="center">
  <img width="140px" src="https://github.com/TheRedstoneDEV-DE/VoiceAssistant/blob/main/javi-low-resolution-logo-color-on-transparent-background.png" align="center" alt="GitHub Readme Stats" />
@@ -190,4 +190,23 @@ First run the server.</p>
 </tr>
 </tbody>
 </table>
+</html>
 
+### Run with Mimic 3
+Just start the VoiceAssistant with the following arguments:
+```
+--mimic3 [HOST]:[PORT]
+```
+⚠️ NOTE: you need to give both: HOST and  PORT ⚠️
+
+### Enabling the LLM integration (activateable by saying: "start artificial intelligence")
+1. Setup the VoiceAssistant, if you havent already and go through initial setup
+2. Append this to the config/VoiceAssistant.properties config file and edit it to your liking:
+```properties
+llm-enabled=true
+llm-host=localhost:4891
+llm-model=GPT4All Falkon
+llm-api-key=NOT NEEDED
+llm-max-tokens=150
+```
+3. Start the VoiceAssistant and try it out!
