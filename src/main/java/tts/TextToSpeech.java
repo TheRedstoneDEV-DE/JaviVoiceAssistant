@@ -50,6 +50,7 @@ public class TextToSpeech {
 				Logger.getLogger(getClass().getName()).log(Level.SEVERE, null, ex);
 			}
 		}
+		System.out.println("TTS >> Initialised!");
 	}
 
 	public void speak(String text) {

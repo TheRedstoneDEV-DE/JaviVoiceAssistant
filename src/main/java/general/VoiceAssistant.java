@@ -3,14 +3,22 @@ package general;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.net.ServerSocket;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.DataLine;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
 
+import com.openai.OpenAPIConnector;
 import org.json.*;
 import org.vosk.LibVosk;
 import org.vosk.LogLevel;
@@ -38,14 +46,13 @@ public class VoiceAssistant implements Runnable {
 	public boolean isRunning = true;
 	public TextToSpeech tts;
 	Boolean active = false;
-	Boolean restart = false;
-	Boolean fulldict = false;
+	public Boolean aiMode = false;
 	Main m = Main.getMain();
 
 	public VoiceAssistant(boolean isRemote, Client connection, boolean mimic, String host) {
 		remote = isRemote;
 		client = connection;
-		tts = new TextToSpeech(isRemote, connection, mimic, host);
+		tts = new TextToSpeech(isRemote, connection, mimic,host);
 	}
 
 	public VoiceAssistant() {
@@ -57,7 +64,8 @@ public class VoiceAssistant implements Runnable {
 			put("pause", voicecommands.VoiceCommandPlayback.class);
 			put("previous", voicecommands.VoiceCommandPlayback.class);
 			put("next", voicecommands.VoiceCommandPlayback.class);
-
+			put("start artificial intelligence", voicecommands.VoicCommandAI.class);
+			put("stop artificial intelligence", voicecommands.VoicCommandAI.class);
 			put("show overlay", voicecommands.VoiceCommandsOverlay.class);
 			put("hide overlay", voicecommands.VoiceCommandsOverlay.class);
 			put("set volume to", voicecommands.VoiceCommandVolume.class);
@@ -78,13 +86,11 @@ public class VoiceAssistant implements Runnable {
 		try {
 			final JSONObject obj = new JSONObject(voiceCommand);
 			voiceCommand = obj.getString("text");
-			if (voiceCommand.startsWith("the")){
-				voiceCommand = voiceCommand.replaceFirst("the","");
-			}
 			if (voiceCommand.equalsIgnoreCase("hey javi")) {// activation command
 				active = true;
 				tts.speak("Hey");
-			} else if (active) {
+			} else if (active && !aiMode) {
+				active = false;
 				try {
 					Boolean commandKnown = false;
 					for (Map.Entry<String, Class> command : commands.entrySet()) {
@@ -130,7 +136,21 @@ public class VoiceAssistant implements Runnable {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				active = false;
+			}else if(active && aiMode){
+				if(voiceCommand.startsWith("stop artificial intelligence")){
+					tts.speak("switched to normal mode, to continue say any word");
+					aiMode = false;
+					isRunning = false;
+				}else {
+					Stream<String> result = new OpenAPIConnector().infer(voiceCommand,"http://"+m.man.get("llm-host")+"/v1/chat/completions",m.man.get("llm-model"),m.man.get("llm-api-key"), m.man.get("llm-max-tokens")).lines();
+					result.forEach(line -> {
+						System.out.println(line);
+						if (line!="") {
+							tts.speak(line);
+						}
+					});
+					active = false;
+				}
 			}
 			if (Main.getMain().man.get("overlay-module-activated").equalsIgnoreCase("yes")) {
 				m.oth.o.AIactive = active;
@@ -140,7 +160,15 @@ public class VoiceAssistant implements Runnable {
 			ex.printStackTrace();
 		}
 	}
-
+	public String send(String URL_GET) throws IOException, InterruptedException{
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+				.GET()
+				.timeout(Duration.ofSeconds(60))
+				.uri(URI.create(URL_GET))
+				.build();
+		return client.send(request, HttpResponse.BodyHandlers.ofString()).body();
+	}
 	@Override
 	public void run() {
 		if (remote) {
@@ -157,40 +185,24 @@ public class VoiceAssistant implements Runnable {
 		}
 	}
 
-	private void rst() {
-		System.out.println("restarting Recogniton...");
+	public void restart() {
 		try {
-			if (!remote) {
-				if (!fulldict) {
-					String vocab = Main.getMain().vocab;
-					String[] newVoc = Main.getMain().man.get("progNames").split(";");
-					for (String voc : newVoc){
-						if (!vocab.contains(voc)){
-							vocab = vocab + " " + voc;
-						}
-					}
-					recognizer = new Recognizer(model, 120000, "[\"" + vocab + "\", \"\"]");
-				} else {
-					recognizer = new Recognizer(model, 120000);
-				}
-			}else{
-
-			}
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-		fulldict = false;
-		restart=false;
+		//model = new Model("model");
+		System.out.println("restarting Recogniton...");
+		recognizer = new Recognizer(model, 120000, "[\"" + Main.getMain().vocab + "\", \"\"]");
 		startRec();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	public void restartWithFullDict(){
-			fulldict = true;
-			isRunning = false;
-			restart = true;
-	}
-	public void restart(){
-		isRunning = false;
-		restart = true;
+		try {
+			//model = new Model("big_model");
+			recognizer = new Recognizer(model, 120000);
+			startRec();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public boolean isAudible(byte[] data) {
@@ -274,7 +286,7 @@ public class VoiceAssistant implements Runnable {
 								if (res != null && res != "{\n" + "  \"text\" : \"\"\n" + "}"
 										&& res != "{\n" + "  \"text\" : \"the\"\n" + "}"
 										&& !res.equalsIgnoreCase("{\n" + "  \"text\" : \"\"\n" + "}")) {
-									System.out.println("Recognizer >> Got command: " + res);
+									System.out.println("Recognizer1 >> Got command: " + res);
 									processCommand(res);
 									recognizer.reset();
 								}
@@ -285,8 +297,11 @@ public class VoiceAssistant implements Runnable {
 				microphone.drain();
 				microphone.close();
 				m.close();
-				if(restart){
-					rst();
+				System.out.println("VA_RECOG_THR >> Exited!");
+				if (aiMode) {
+					restartWithFullDict();
+				}else{
+					restart();
 				}
 			}
 		} catch (Exception e) {

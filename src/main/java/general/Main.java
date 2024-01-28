@@ -23,9 +23,9 @@ public class Main {
 	public Boolean QtInitialized = false;
 	private Boolean init = false;
 	public com.discord.DiscordRPCStatus dcRPC;
-	VoiceAssistant va;
+	public VoiceAssistant va;
 	public configuration.Manager man = new configuration.Manager();
-	public String vocab = "programs shutdown reconfigure stop the hey javi pause resume next previous set volume to percent open hide show overlay what is the cpu usage start conversation ten twenty thirty forty fifty sixty seventy eighty ninety ";
+	public String vocab = "programs shutdown reconfigure stop the hey javi start stop artificial intelligence mode pause resume next previous set volume to percent open hide show overlay what is the cpu usage start conversation ten twenty thirty forty fifty sixty seventy eighty ninety ";
 	public int sensibility = 20;
 
 	public static void main(String[] args) {
@@ -47,17 +47,20 @@ public class Main {
 						System.exit(0);
 					}
 				}
+
 				boolean mimic = false;
 				String host = "";
 				if (args.length == 2){
 					if (args[0].equals("--mimic3")){
 						mimic = true;
 						host = args[1];
+						System.out.println("TTS is set to MIMIC3 on host: "+args[1]);
 					}
 				}else if(args.length == 4){
 					if (args[2].equals("--mimic3")){
 						mimic = true;
 						host = args[3];
+						System.out.println("TTS is set to MIMIC3 on host: "+args[3]);
 					}
 				}
 
@@ -155,6 +158,13 @@ public class Main {
 	}
 
 	public void restart() {
-		main.va.restart();
+		if (!init) {
+			System.out.println("Configurations done! Please start the program again now!");
+			System.exit(0);
+		} else {
+			RST = true;
+			restarted = true;
+			va.isRunning = false;
+		}
 	}
 }

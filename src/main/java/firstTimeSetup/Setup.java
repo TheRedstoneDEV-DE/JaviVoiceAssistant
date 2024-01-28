@@ -10,6 +10,6 @@ public class Setup {
 		new File("plugins").mkdirs();
 		new File("keys").mkdirs(); 
 		System.out.println("...Done!");
-		Ui.init(false, null);
+		Ui.init();
 	}
 }
