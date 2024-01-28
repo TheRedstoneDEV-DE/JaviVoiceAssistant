@@ -64,8 +64,8 @@ public class VoiceAssistant implements Runnable {
 			put("pause", voicecommands.VoiceCommandPlayback.class);
 			put("previous", voicecommands.VoiceCommandPlayback.class);
 			put("next", voicecommands.VoiceCommandPlayback.class);
-			put("start artificial intelligence", voicecommands.VoicCommandAI.class);
-			put("stop artificial intelligence", voicecommands.VoicCommandAI.class);
+			put("start artificial intelligence", voicecommands.VoiceCommandAI.class);
+			put("stop artificial intelligence", voicecommands.VoiceCommandAI.class);
 			put("show overlay", voicecommands.VoiceCommandsOverlay.class);
 			put("hide overlay", voicecommands.VoiceCommandsOverlay.class);
 			put("set volume to", voicecommands.VoiceCommandVolume.class);
