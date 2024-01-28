@@ -4,7 +4,7 @@ import general.CmdMask;
 import general.Main;
 import tts.TextToSpeech;
 
-public class VoicCommandAI extends CmdMask {
+public class VoiceCommandAI extends CmdMask {
     @Override
     public void execute(String command, TextToSpeech tts, Main main) {
         if(command.startsWith("start artificial intelligence")&&main.man.get("llm-enabled")!=null){
@@ -15,6 +15,8 @@ public class VoicCommandAI extends CmdMask {
             }else{
                 tts.speak("AI mode is disabled, consult the manual");
             }
-        }
+        }else{
+            tts.speak("AI mode is disabled, consult the manual");
+        }    
     }
 }
