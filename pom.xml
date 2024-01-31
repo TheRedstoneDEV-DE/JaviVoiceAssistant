@@ -42,7 +42,7 @@
 		<dependency>
 			<groupId>de.dfki.mary</groupId>
 			<artifactId>marytts-lang-en</artifactId>
-			<version>5.2.1</version>
+			<version>5.2</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.twmacinta</groupId>
@@ -129,13 +129,13 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20231013</version>
+			<version>20220320</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.hypfvieh/dbus-java-core -->
 		<dependency>
 			<groupId>com.github.hypfvieh</groupId>
 			<artifactId>dbus-java-core</artifactId>
-			<version>4.3.0</version>
+			<version>4.3.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.hypfvieh/dbus-java-transport-native-unixsocket -->
 		<dependency>
