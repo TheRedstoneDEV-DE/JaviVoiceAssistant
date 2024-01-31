@@ -129,7 +129,7 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20231013</version>
+			<version>20220320</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.hypfvieh/dbus-java-core -->
 		<dependency>
