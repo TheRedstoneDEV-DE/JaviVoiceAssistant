@@ -10,7 +10,7 @@
       <img alt="Tests Passing" src="https://github.com/anuraghazra/github-readme-stats/workflows/Test/badge.svg" />
     </a>
     <a href="https://github.com/TheRedstoneDEV-DE/JaviVoiceAssistant/releases">
-      <img alt="GitHub Release" src="https://img.shields.io/github/release/javitheredstonedev-de/voiceassistant" />
+      <img alt="GitHub Release" src="https://img.shields.io/github/release/theredstonedev-de/javivoiceassistant" />
     </a>
     <a href="https://github.com/TheRedstoneDEV-DE/JaviVoiceAssistant/issues">
       <img alt="Issues" src="https://img.shields.io/github/issues/theredstonedev-de/javivoiceassistant?color=0088ff" />
