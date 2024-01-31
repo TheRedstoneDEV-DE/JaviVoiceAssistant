@@ -1,7 +1,7 @@
 <html>
 
 <p align="center">
- <img width="140px" src="https://github.com/JaviTheRedstoneDEV-DE/VoiceAssistant/blob/main/javi-low-resolution-logo-color-on-transparent-background.png" align="center" alt="GitHub Readme Stats" />
+ <img width="140px" src="https://theredstonedev-de.github.io/JaviVoiceAssistant/javi-low-resolution-logo-color-on-transparent-background.png" align="center" alt="GitHub Readme Stats" />
  <h2 align="center">OpenSource VoiceAssitant Javi</h2>
  <p align="center">A multifunction and fully offline usable open-source voice assistant written in Java!</p>
 </p>
