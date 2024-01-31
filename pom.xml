@@ -100,7 +100,7 @@
 		<dependency>
 			<groupId>de.dfki.mary</groupId>
 			<artifactId>voice-cmu-slt-hsmm</artifactId>
-			<version>5.2</version>
+			<version>5.2.1</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/de.dfki.mary/voice-dfki-poppy-hsmm -->
 		<dependency>
