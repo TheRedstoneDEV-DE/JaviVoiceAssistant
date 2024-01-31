@@ -141,8 +141,8 @@ First run the server.</p>
 </thead>
 <tbody>
 <tr>
-<td>hey computer</td>
-<td>just the base command, has to be said, before any other voice command</td>
+<td>hey javi</td>
+<td>just the activation command, has to be said, before any other voice command</td>
 </tr>
 <tr>
 <td>set volume to [number between 10-90] percent</td>
