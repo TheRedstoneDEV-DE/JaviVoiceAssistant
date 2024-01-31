@@ -24,7 +24,7 @@
 
 <p align="center">
  ⚠️ NOTICE: The LICENSE file only applies to the source-code (java files) in this repo, not to any dependencies! ⚠️<br>
- Liecence Infomation of used libraries can be found here: https://theredstonedev-de.github.io/VoiceAssistant/target/site/
+ License Infomation of used libraries can be found here: https://theredstonedev-de.github.io/VoiceAssistant/target/site/
  <br>
  Please inform me about bugs you have found via the issues!<br>
 ⚠️ This is still Work-In-Progress Software! ⚠️
