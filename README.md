@@ -168,6 +168,10 @@ First run the server.</p>
 <td>pause/resume/next/previous</td>
 <td>plays/pauses a mediaplayer, skippes one title forward/backward</td>
 </tr>
+<tr>
+<td>start/stop artificial intelligence</td>
+<td>enters/exits the ai-mode if LLMs are enabled</td>
+</tr>
 </tbody>
 </table>
 <hr>
