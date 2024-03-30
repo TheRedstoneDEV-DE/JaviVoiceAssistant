@@ -3,6 +3,7 @@
 <p align="center">
  <img width="140px" src="https://theredstonedev-de.github.io/JaviVoiceAssistant/javi-low-resolution-logo-color-on-transparent-background.png" align="center" alt="GitHub Readme Stats" />
  <h2 align="center">OpenSource VoiceAssitant Javi</h2>
+ <p align="center">https://javi.devellight.studio/</p>
  <p align="center">A multifunction and fully offline usable open-source voice assistant written in Java!</p>
 </p>
   <p align="center">
