@@ -30,19 +30,19 @@
 		<dependency>
 			<groupId>io.qtjambi</groupId>
 			<artifactId>qtjambi-native-linux-x64</artifactId>
-			<version>6.4.3</version>
+			<version>6.7.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/io.qtjambi/qtjambi -->
 		<dependency>
 			<groupId>io.qtjambi</groupId>
 			<artifactId>qtjambi</artifactId>
-			<version>6.4.3</version>
+			<version>6.7.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/de.dfki.mary/marytts-lang-en -->
 		<dependency>
 			<groupId>de.dfki.mary</groupId>
 			<artifactId>marytts-lang-en</artifactId>
-			<version>5.2</version>
+			<version>5.2.1</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.twmacinta</groupId>
@@ -135,13 +135,13 @@
 		<dependency>
 			<groupId>com.github.hypfvieh</groupId>
 			<artifactId>dbus-java-core</artifactId>
-			<version>4.3.1</version>
+			<version>4.3.2</version>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/com.github.hypfvieh/dbus-java-transport-native-unixsocket -->
 		<dependency>
 			<groupId>com.github.hypfvieh</groupId>
 			<artifactId>dbus-java-transport-native-unixsocket</artifactId>
-			<version>4.3.1</version>
+			<version>4.3.2</version>
 		</dependency>
 
 	</dependencies>
